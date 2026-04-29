@@ -52,7 +52,7 @@
         content: "kitty.desktop\n"
         mode: '644'
 
-- name: Copy neovim configuration
+- name: Copy kitty configuration
   ansible.posix.synchronize:
     src: "config/"
     dest: "~/.config/kitty/"

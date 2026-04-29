@@ -14,7 +14,6 @@
   register: rustup_update
   changed_when: "'unchanged' not in rustup_update.stdout"
 
-# TODO: Change this to use cargo community module
 - name: Install or update cargo packages
   community.general.cargo:
     name:
