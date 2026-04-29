@@ -27,5 +27,9 @@ return function(use)
       config = function() require("plugins.configs.treesitter") end,
       run = ":TSUpdate",
    }
-   use { "HiPhish/rainbow-delimiters.nvim", requires = { "nvim-treesitter/nvim-treesitter" } }
+   use {
+      "HiPhish/rainbow-delimiters.nvim",
+      commit = "3277ad5f96eb03c9d618c88e24f683e4364e578c",
+      requires = { "nvim-treesitter/nvim-treesitter" }
+   }
 end

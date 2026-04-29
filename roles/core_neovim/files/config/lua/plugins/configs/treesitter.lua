@@ -11,8 +11,5 @@ require("nvim-treesitter.configs").setup {
       "racket",
       "rust",
    },
-   highlight = { enable = true },
-   rainbow = {
-      enable = true,
-   },
+   highlight = { enable = true }
 }
