@@ -1,16 +1,14 @@
-- name: Fetch latest kitty version
-  ansible.builtin.uri:
-    url: "https://sw.kovidgoyal.net/kitty/current-version.txt"
-    return_content: true
-  register: _kitty_latest
-  check_mode: false
+- name: Get latest kitty information
+  include_tasks: "../../tasks/github_release_asset.yml"
+  vars:
+    github_repo: "kovidgoyal/kitty"
 
 - name: Check if kitty needs update
   include_tasks: "../../tasks/check_version.yml"
   vars:
     check_binary_path: "{{ kitty_install_dir }}/bin/kitty"
     check_version_cmd: "{{ kitty_install_dir }}/bin/kitty --version"
-    check_desired_version: "{{ _kitty_latest.content }}"
+    check_desired_version: "{{ _gh_desired_version }}"
     check_app_name: kitty
 
 - name: Install/update kitty
