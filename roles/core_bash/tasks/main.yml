@@ -7,3 +7,4 @@
   ansible.posix.synchronize:
     src: "config/"
     dest: "~/"
+    times: false

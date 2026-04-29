@@ -18,3 +18,4 @@
   ansible.posix.synchronize:
     src: "config/"
     dest: "~/.config/atuin/"
+    times: false

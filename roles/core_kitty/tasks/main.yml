@@ -56,3 +56,4 @@
   ansible.posix.synchronize:
     src: "config/"
     dest: "~/.config/kitty/"
+    times: false
