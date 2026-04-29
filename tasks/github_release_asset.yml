@@ -21,9 +21,10 @@
     url: "{{ _gh_api_url }}"
     return_content: yes
     headers:
-      Accept: application/vnd.github+json
+      Accept: "application/vnd.github+json"
     status_code: 200
   register: _gh_release
+  check_mode: false
 
 - name: Extract version from tag
   ansible.builtin.set_fact:

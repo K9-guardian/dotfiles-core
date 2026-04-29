@@ -24,8 +24,8 @@
   when: _check_stat.stat.exists
   ansible.builtin.command: "{{ check_version_cmd }}"
   register: _check_installed
+  check_mode: false
   changed_when: false
-  ignore_errors: true
 
 - name: "Extract installed version string"
   vars:
