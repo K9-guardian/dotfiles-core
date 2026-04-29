@@ -1,0 +1,9 @@
+- name: Ensure directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '755'
+  loop:
+    - "~/.bin"
+    - "~/.local/share/applications"
+    - "~/.passfiles"
