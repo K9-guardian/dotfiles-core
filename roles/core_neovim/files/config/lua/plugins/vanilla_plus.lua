@@ -18,14 +18,14 @@ return function(use)
    use {
       "ibhagwan/fzf-lua",
       config = function() require("plugins.configs.fzf-lua") end,
-      requires = { "nvim-tree/nvim-web-devicons" }
+      requires = { "nvim-tree/nvim-web-devicons" },
    }
 
    use {
       "nvim-treesitter/nvim-treesitter",
       branch = "master",
       config = function() require("plugins.configs.treesitter") end,
-      run = ":TSUpdate"
+      run = ":TSUpdate",
    }
    use { "HiPhish/rainbow-delimiters.nvim", requires = { "nvim-treesitter/nvim-treesitter" } }
 end
