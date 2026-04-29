@@ -1,0 +1,3 @@
+neovim_release_tag: "197326483" # v0.10.4
+
+neovim_install_dir: "/opt/nvim"

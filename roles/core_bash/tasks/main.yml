@@ -1,0 +1,9 @@
+- name: Change login shell to /bin/bash
+  ansible.builtin.user:
+    name: "{{ ansible_facts.user_id }}"
+    shell: /bin/bash
+
+- name: Copy bash configuration
+  ansible.posix.synchronize:
+    src: "config/"
+    dest: "~/"

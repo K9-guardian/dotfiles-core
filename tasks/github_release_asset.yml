@@ -1,0 +1,101 @@
+# Self-contained GitHub release asset picker.
+# Sets:
+#   _gh_download_url          - full browser_download_url
+#   _gh_desired_version       - clean version (without leading 'v')
+#   _gh_tag                   - original Git tag
+#   _gh_asset_name            - asset filename
+#
+# Input variables (all optional except github_repo):
+#   github_repo               - "owner/repo" (required)
+#   github_release_tag        - "latest" (default) or a specific tag
+#   os_tokens                 - override list of OS keywords (rarely needed)
+#   arch_tokens               - override list of architecture keywords
+
+- name: Build GitHub API URL
+  ansible.builtin.set_fact:
+    _gh_api_url: >-
+      https://api.github.com/repos/{{ github_repo }}/releases/{{ github_release_tag | default('latest') }}
+
+- name: Fetch release metadata
+  ansible.builtin.uri:
+    url: "{{ _gh_api_url }}"
+    return_content: yes
+    headers:
+      Accept: application/vnd.github+json
+    status_code: 200
+  register: _gh_release
+
+- name: Extract version from tag
+  ansible.builtin.set_fact:
+    _gh_tag: "{{ _gh_release.json.tag_name }}"
+    _gh_desired_version: "{{ _gh_release.json.tag_name | regex_replace('^v', '') }}"
+
+# -------------------------------------------------------------------
+# Built-in platform token tables – cover 95% of projects out of the box
+# -------------------------------------------------------------------
+- name: Set default OS tokens
+  ansible.builtin.set_fact:
+    _os_tokens: >-
+      {{ os_tokens | default(
+           {'Linux': ['linux'],
+            'Darwin': ['darwin', 'macos', 'mac'],
+            'Win32NT': ['windows', 'win32', 'win']
+           }[ansible_facts.system] | default(['linux'])
+         ) }}
+
+- name: Set default architecture tokens
+  ansible.builtin.set_fact:
+    _arch_tokens: >-
+      {{ arch_tokens | default(
+           {'x86_64': ['amd64', 'x86_64', 'x64'],
+            'i386': ['386', 'i386', 'x86'],
+            'aarch64': ['arm64', 'aarch64'],
+            'armv7l': ['armv7', 'armhf', 'arm'],
+            'armv6l': ['armv6', 'arm']
+           }[ansible_facts.architecture] | default(['amd64'])
+         ) }}
+
+- name: Set preferred file extension
+  ansible.builtin.set_fact:
+    _preferred_ext: "{{ 'zip' if ansible_facts.system == 'Win32NT' else 'tar.gz' }}"
+
+# -------------------------------------------------------------------
+# Score each asset and pick the best match
+# -------------------------------------------------------------------
+- name: Select best asset via scoring
+  ansible.builtin.set_fact:
+    _best_asset: >-
+      {%- set assets = _gh_release.json.assets -%}
+      {%- if assets | length == 0 -%}
+        {}
+      {%- else -%}
+        {%- set scored = [] -%}
+        {%- for asset in assets -%}
+          {%- set name = asset.name | lower -%}
+          {%- set os_score = _os_tokens | select('in', name) | list | length -%}
+          {%- set arch_score = _arch_tokens | select('in', name) | list | length -%}
+          {%- set ext_score = 1 if _preferred_ext in name else 0 -%}
+          {%- set total = os_score + arch_score + ext_score -%}
+          {%- set _ = scored.append({'asset': asset, 'score': total}) -%}
+        {%- endfor -%}
+        {%- set best = scored | sort(attribute='score', reverse=true) | first -%}
+        {%- if best.score > 0 -%}
+          {{ best.asset }}
+        {%- else -%}
+          {}
+        {%- endif -%}
+      {%- endif -%}
+
+- name: Fail if no suitable asset found
+  ansible.builtin.fail:
+    msg: >-
+      No matching asset found for {{ ansible_facts.system }}/{{ ansible_facts.architecture }}.
+      Tried OS tokens: {{ _os_tokens }}
+      Tried arch tokens: {{ _arch_tokens }}
+      Available assets: {{ _gh_release.json.assets | map(attribute='name') | list }}
+  when: _best_asset | length == 0
+
+- name: Set output facts
+  ansible.builtin.set_fact:
+    _gh_download_url: "{{ _best_asset.browser_download_url }}"
+    _gh_asset_name: "{{ _best_asset.name }}"

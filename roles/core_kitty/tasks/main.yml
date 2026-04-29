@@ -1,0 +1,58 @@
+- name: Fetch latest kitty version
+  ansible.builtin.uri:
+    url: "https://sw.kovidgoyal.net/kitty/current-version.txt"
+    return_content: true
+  register: _kitty_latest
+  check_mode: false
+
+- name: Check if kitty needs update
+  include_tasks: "../../tasks/check_version.yml"
+  vars:
+    check_binary_path: "{{ kitty_install_dir }}/bin/kitty"
+    check_version_cmd: "{{ kitty_install_dir }}/bin/kitty --version"
+    check_desired_version: "{{ _kitty_latest.content }}"
+    check_app_name: kitty
+
+- name: Install/update kitty
+  when:
+    - _needs_update | default(false)
+    - not ansible_check_mode
+  ansible.builtin.shell:
+    cmd: >-
+      curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
+      {{ ('dest=' ~ kitty_install_dest) if ansible_facts.system == 'Linux' else '' }}
+  become: true
+
+- name: Configure kitty for linux
+  when: ansible_facts.system == 'Linux'
+  block:
+    - name: Symlink kitty and kitten
+      when: _needs_update | default(false)
+      ansible.builtin.file:
+        src: "{{ kitty_install_dir }}/bin/{{ item }}"
+        dest: "{{ bin_dir }}/{{ item }}"
+        state: link
+        force: true
+      loop:
+        - kitty
+        - kitten
+
+    - name: Copy kitty desktop files
+      ansible.builtin.template:
+        src: "{{ item }}.j2"
+        dest: "~/.local/share/applications/{{ item }}"
+        mode: '644'
+      loop:
+        - kitty.desktop
+        - kitty-open.desktop
+
+    - name: Set kitty as default terminal
+      ansible.builtin.copy:
+        dest: "~/.config/xdg-terminals.list"
+        content: "kitty.desktop\n"
+        mode: '644'
+
+- name: Copy neovim configuration
+  ansible.posix.synchronize:
+    src: "config/"
+    dest: "~/.config/kitty/"

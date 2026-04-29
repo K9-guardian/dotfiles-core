@@ -1,0 +1,15 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,bm,centernot,dsfont,enumerate,graphicx,verbatim}
+\newcommand{\N}{\mathds{N}}
+\newcommand{\Z}{\mathds{Z}}
+\newcommand{\R}{\mathds{R}}
+\newcommand{\Q}{\mathds{Q}}
+\newcommand{\C}{\mathds{C}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\parens}[1]{\left(#1\right)}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\renewcommand{\lor}{\text{ or }}
+\renewcommand{\land}{\text{ and }}
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}

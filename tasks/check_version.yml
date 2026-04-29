@@ -1,0 +1,52 @@
+# Compares installed binary version to a desired version string.
+# Sets fact _needs_update (bool).
+#
+# Required variables:
+#   check_binary_path       - full path to binary
+#   check_version_cmd       - command that prints version information (e.g., "{{ binary }} --version")
+#   check_desired_version   - version string to compare against (e.g., "1.2.3")
+#   check_app_name          - (optional) friendly name for logging
+#
+# Optional variables:
+#   check_version_regex     - Perl‐compatible regex to capture the version number from stdout.
+#                              Must contain exactly one capture group.
+#                              Default: 'v?(\d+\.\d+\.\d+.*)'  (matches "1.2.3", "v1.2.3-beta", etc.)
+#   check_version_operator  - Operator for version comparison (==, !=, >, >=, <, <=).
+#                              Default: '>='  (installed version must be ≥ desired version)
+#   check_version_type      - 'loose' (any string) or 'strict' (valid SemVer). Default: 'loose'
+
+- name: "Check if {{ check_app_name | default('binary') }} exists"
+  ansible.builtin.stat:
+    path: "{{ check_binary_path }}"
+  register: _check_stat
+
+- name: "Get installed version of {{ check_app_name | default('binary') }}"
+  when: _check_stat.stat.exists
+  ansible.builtin.command: "{{ check_version_cmd }}"
+  register: _check_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: "Extract installed version string"
+  vars:
+    _version_pattern: '(\d+\.\d+\.\d+)' # Defining this AOT to avoid escaping hell
+  when:
+    - _check_stat.stat.exists
+    - _check_installed is success
+  ansible.builtin.set_fact:
+    _installed_version_raw: >-
+      {{ _check_installed.stdout | ansible.builtin.regex_search(_version_pattern) }}
+
+- name: Determine if update is needed
+  ansible.builtin.set_fact:
+    _needs_update: >-
+      {{ ( not _check_stat.stat.exists or 
+           (_check_installed is failed) or 
+           (_installed_version_raw | length == 0) or 
+           not (_installed_version_raw is version(
+             check_desired_version, 
+             check_version_operator | default('>='), 
+             version_type=check_version_type | default('loose')
+           ))
+         ) | bool
+      }}

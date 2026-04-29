@@ -1,0 +1,20 @@
+- name: Check if atuin is installed
+  command: "atuin --version"
+  register: atuin_check
+  changed_when: false
+  failed_when: false
+
+- name: Install atuin
+  ansible.builtin.shell:
+    cmd: "curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh -s -- --non-interactive"
+  when: atuin_check.rc != 0
+
+- name: Update atuin
+  command: "atuin update"
+  register: atuin_update
+  changed_when: "'Already up to date' not in atuin_update.stderr"
+
+- name: Copy atuin configuration
+  ansible.posix.synchronize:
+    src: "config/"
+    dest: "~/.config/atuin/"
