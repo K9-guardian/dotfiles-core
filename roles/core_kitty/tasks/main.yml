@@ -53,6 +53,6 @@
 - name: Copy kitty configuration
   ansible.posix.synchronize:
     src: "config/"
-    dest: "~/.config/kitty/"
+    dest: "~/.config/kitty"
     times: false
     checksum: true

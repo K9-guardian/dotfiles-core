@@ -1,2 +1,2 @@
-kitty_install_dest: /opt
-kitty_install_dir: /opt/kitty.app
+kitty_install_dest: "/opt"
+kitty_install_dir: "/opt/kitty.app"

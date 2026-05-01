@@ -6,6 +6,6 @@
 - name: Copy bash configuration
   ansible.posix.synchronize:
     src: "config/"
-    dest: "~/"
+    dest: "~"
     times: false
     checksum: true

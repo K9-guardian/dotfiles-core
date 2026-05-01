@@ -17,6 +17,6 @@
 - name: Copy atuin configuration
   ansible.posix.synchronize:
     src: "config/"
-    dest: "~/.config/atuin/"
+    dest: "~/.config/atuin"
     times: false
     checksum: true
