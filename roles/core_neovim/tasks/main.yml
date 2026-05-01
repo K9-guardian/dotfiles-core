@@ -1,18 +1,10 @@
-- name: Get neovim (v0.10.4) information
+- name: Get neovim v0.10.4 information
   include_tasks: "../../tasks/github_release_asset.yml"
   vars:
     github_repo: "neovim/neovim"
     github_release_tag: "{{ neovim_release_tag }}"
 
-- name: Check if neovim needs update
-  include_tasks: "../../tasks/check_version.yml"
-  vars:
-    check_binary_path: "{{ neovim_install_dir }}/bin/nvim"
-    check_version_cmd: "{{ neovim_install_dir }}/bin/nvim --version"
-    check_desired_version: "{{ _gh_desired_version }}"
-    check_app_name: neovim
-
-- name: Install neovim from tarball
+- name: Install neovim v0.10.4 from tarball
   include_tasks: "../../tasks/install_tarball.yml"
   vars:
     tarball_app_name: neovim
@@ -22,11 +14,10 @@
       - "--strip-components=1"
     tarball_binary_subpath: "bin/nvim"
     tarball_symlink_name: "nvim"
-  when: _needs_update | default(false)
 
 - name: Copy neovim configuration
   ansible.posix.synchronize:
     src: "config/"
-    dest: "~/.config/nvim/"
+    dest: "~/.config/nvim"
     times: false
     checksum: true

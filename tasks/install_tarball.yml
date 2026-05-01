@@ -1,5 +1,3 @@
-# tasks/install_tarball.yml
-#
 # Reusable steps to:
 # 1. Download a release tarball with optional checksum validation
 # 2. (Optional) Verify the tarball's GPG signature
@@ -18,51 +16,77 @@
 #   tarball_binary_subpath  - Relative path inside install dir to the main executable
 #                             (default: "bin/{{ tarball_app_name }}")
 #   tarball_symlink_name    - Name of the symlink in bin_dir (default: tarball_app_name)
+#   tarball_log_dir         - Name of the directory to store download logs for tarballs (default: ~/.tarballs)
 #   bin_dir                 - Directory for symlinks (default: ~/.bin)
 
-- name: "Download {{ tarball_app_name }} tarball"
-  when: not ansible_check_mode
-  ansible.builtin.get_url:
-    url: "{{ tarball_url }}"
-    dest: "/tmp/{{ tarball_url | basename }}"
-    checksum: "{{ tarball_checksum | default(omit) }}"
-  register: _download
-
 - name: "Store tarball filename for later tasks"
-  when: not ansible_check_mode
   ansible.builtin.set_fact:
     _tarball_filename: "{{ tarball_url | basename }}"
 
-- name: "Ensure install directory exists for {{ tarball_app_name }}"
-  ansible.builtin.file:
-    path: "{{ tarball_install_dir }}"
-    state: directory
-    owner: root
-    group: root
-    mode: '755'
-  become: true
+- name: "Check if {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }} exists"
+  ansible.builtin.stat:
+    path: "{{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
+  register: _check_log_dir_file
 
-- name: "Extract {{ tarball_app_name }} tarball"
-  when:
-    - not ansible_check_mode
-    - _download is changed
-  ansible.builtin.unarchive:
-    src: "/tmp/{{ tarball_url | basename }}"
-    dest: "{{ tarball_install_dir }}"
-    remote_src: true
-    extra_opts: "{{ tarball_extra_opts | default([]) }}"
-  become: true
+- name: "Read and decode {{ tarball_app_name }} filename from {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
+  when: _check_log_dir_file.stat.exists
+  block:
+  - name: "Read {{ tarball_app_name }} filename from {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
+    ansible.builtin.slurp:
+      src: "{{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
+    register: _previous_tarball_filename_encoded
 
-- name: "Remove temporary files for {{ tarball_app_name }}"
-  when: not ansible_check_mode
-  ansible.builtin.file:
-    path: "/tmp/{{ _tarball_filename }}"
-    state: absent
-  become: true
+  - name: "Decode {{ tarball_app_name }} filename"
+    ansible.builtin.set_fact:
+      _previous_tarball_filename: >-
+        {{ (_previous_tarball_filename_encoded.content | b64decode | trim)
+           if not _previous_tarball_filename_encoded.failed else '' }}
 
-- name: "Symlink {{ tarball_app_name }} into {{ bin_dir | default('~/.bin') }}"
-  ansible.builtin.file:
-    src: "{{ tarball_install_dir }}/{{ tarball_binary_subpath | default('bin/' + tarball_app_name) }}"
-    dest: "{{ bin_dir | default('~/.bin') }}/{{ tarball_symlink_name | default(tarball_app_name) }}"
-    state: link
-    force: true
+- name: "Install {{ tarball_app_name }} tarball"
+  when: _previous_tarball_filename is not defined or _previous_tarball_filename != _tarball_filename
+  block:
+  - name: "Download {{ tarball_app_name }} tarball"
+    ansible.builtin.get_url:
+      url: "{{ tarball_url }}"
+      dest: "/tmp/{{ _tarball_filename }}"
+      checksum: "{{ tarball_checksum | default(omit) }}"
+    register: _download
+
+  - name: "Ensure install directory exists for {{ tarball_app_name }}"
+    ansible.builtin.file:
+      path: "{{ tarball_install_dir }}"
+      state: directory
+      owner: root
+      group: root
+      mode: '755'
+    become: true
+
+  - name: "Extract {{ tarball_app_name }} tarball"
+    when:
+      - _download is succeeded
+      - not ansible_check_mode
+    ansible.builtin.unarchive:
+      src: "/tmp/{{ _tarball_filename }}"
+      dest: "{{ tarball_install_dir }}"
+      remote_src: true
+      extra_opts: "{{ tarball_extra_opts | default([]) }}"
+    become: true
+
+  - name: "Remove temporary files for {{ tarball_app_name }}"
+    when: not ansible_check_mode
+    ansible.builtin.file:
+      path: "/tmp/{{ _tarball_filename }}"
+      state: absent
+    become: true
+
+  - name: "Symlink {{ tarball_app_name }} into {{ bin_dir | default('~/.bin') }}"
+    ansible.builtin.file:
+      src: "{{ tarball_install_dir }}/{{ tarball_binary_subpath | default('bin/' + tarball_app_name) }}"
+      dest: "{{ bin_dir | default('~/.bin') }}/{{ tarball_symlink_name | default(tarball_app_name) }}"
+      state: link
+      force: true
+
+  - name: "Write {{ _tarball_filename }}  to {{ tarball_log_dir | default('~/.tarballs')}}/{{ tarball_app_name }}"
+    ansible.builtin.copy:
+      content: "{{ _tarball_filename }}"
+      dest: "{{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+pane_command="$*"
+
+while IFS= read -r pane; do
+  (
+    tmux send-keys -t "$pane" C-z
+    sleep 0.1
+    tmux send-keys -t "$pane" "$pane_command" Enter
+    tmux send-keys -t "$pane" 'fg > /dev/null 2>&1' Enter
+  ) &
+done < <(tmux list-panes -s -F '#{session_name}:#{window_index}.#{pane_index}')
+
+wait

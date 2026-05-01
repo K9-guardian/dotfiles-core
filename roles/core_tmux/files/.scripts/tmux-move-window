@@ -1,0 +1,24 @@
+#!/bin/bash
+target=$1
+
+if ! [ "$target" -ge 0 ] 2>/dev/null; then
+  tmux display-message "window-move: invalid target: $target"
+  exit 1
+fi
+
+window_count=$(tmux list-windows | wc -l)
+if [ "$target" -ge "$window_count" ]; then
+  tmux display-message "window-move: $target out of range (0-$((window_count - 1)))"
+  exit 1
+fi
+
+current_index=$(tmux display-message -p '#I')
+if [ "$current_index" -lt "$target" ]; then
+  for _ in $(seq $((target - current_index))); do
+    tmux swap-window -t +1 -d
+  done
+elif [ "$current_index" -gt "$target" ]; then
+  for _ in $(seq $((current_index - target))); do
+    tmux swap-window -t -1 -d
+  done
+fi

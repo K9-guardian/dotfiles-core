@@ -3,14 +3,6 @@
   vars:
     github_repo: "junegunn/fzf"
 
-- name: Check if fzf needs update
-  include_tasks: "../../tasks/check_version.yml"
-  vars:
-    check_binary_path: "{{ fzf_install_dir }}/fzf"
-    check_version_cmd: "{{ fzf_install_dir }}/fzf --version"
-    check_desired_version: "{{ _gh_desired_version }}"
-    check_app_name: fzf
-
 - name: Install fzf from tarball
   include_tasks: "../../tasks/install_tarball.yml"
   vars:
@@ -19,4 +11,3 @@
     tarball_install_dir: "{{ fzf_install_dir }}"
     tarball_binary_subpath: "fzf"
     tarball_symlink_name: "fzf"
-  when: _needs_update | default(false)
