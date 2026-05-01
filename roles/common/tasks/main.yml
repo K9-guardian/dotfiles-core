@@ -4,6 +4,8 @@
     state: directory
     mode: '755'
   loop:
+    - "~/.tarballs"
     - "~/.bin"
+    - "~/.scripts"
     - "~/.local/share/applications"
     - "~/.passfiles"
