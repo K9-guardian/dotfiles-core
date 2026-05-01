@@ -15,15 +15,19 @@ return require("packer").startup(function(use)
    use "wbthomason/packer.nvim"
    require("plugins.vanilla_plus")(use)
 
+   local ok, ext = pcall(require, "plugins.tags")
+   if ok and ext then
+      ext(use)
+   end
    local ok, ext = pcall(require, "plugins.lsp")
    if ok and ext then
       ext(use)
    end
-   ok, ext = pcall(require, "plugins.math")
+   ok, ext = pcall(require, "plugins.languages")
    if ok and ext then
       ext(use)
    end
-   ok, ext = pcall(require, "plugins.languages")
+   ok, ext = pcall(require, "plugins.math")
    if ok and ext then
       ext(use)
    end
