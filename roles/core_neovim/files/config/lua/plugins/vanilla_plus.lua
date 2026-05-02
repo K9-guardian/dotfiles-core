@@ -4,6 +4,7 @@ return function(use)
    use "farmergreg/vim-lastplace"
    use "junegunn/vim-easy-align"
    use "michaeljsmith/vim-indent-object"
+   use { "nvim-mini/mini.ai", config = function() require("mini.ai").setup({}) end }
    use "tpope/vim-commentary"
    use "tpope/vim-fugitive"
    use "tpope/vim-repeat"
@@ -24,8 +25,13 @@ return function(use)
    use {
       "nvim-treesitter/nvim-treesitter",
       branch = "master",
-      config = function() require("plugins.configs.treesitter") end,
       run = ":TSUpdate",
+   }
+   use {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      branch = "master",
+      requires = { "nvim-treesitter/nvim-treesitter" },
+      config = function() require("plugins.configs.treesitter") end,
    }
    use {
       "HiPhish/rainbow-delimiters.nvim",

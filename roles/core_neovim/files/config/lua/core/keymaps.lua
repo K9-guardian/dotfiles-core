@@ -1,8 +1,11 @@
 vim.keymap.set("c", "<C-a>", "<Home>")
 
+vim.keymap.set("n", "<Leader>w", "<Cmd>write<CR>", { silent = false })
+
+vim.keymap.set("n", "<Leader>h", "<Cmd>helpclose<CR>", { silent = false })
+
 vim.keymap.set("n", "<Leader>co", "<Cmd>copen<CR>", { silent = false })
 vim.keymap.set("n", "<Leader>cc", "<Cmd>cclose<CR>", { silent = false })
-vim.keymap.set("n", "<Leader>cq", "<Cmd>cclose<CR>", { silent = false })
 
 vim.keymap.set("v", "<Enter>", "<Plug>(EasyAlign)")
 vim.keymap.set("n", "ga", "<Plug>(EasyAlign)")
@@ -80,18 +83,18 @@ end
 vim.keymap.set({ "n", "x" }, "*", search_word_anchor())
 vim.keymap.set({ "n", "x" }, "#", search_word_anchor("b"))
 
-vim.api.nvim_create_user_command("W", "write", {})
+vim.keymap.set("n", "<Leader>m", function()
+   local input = vim.fn.input("Move to: ")
+   if input == "" then
+      return
+   end
 
-vim.keymap.set("n", "<Leader>t", "<Cmd>Resurrect<CR>", { silent = false })
-
-vim.api.nvim_create_user_command("Tabm", function(opts)
-   local arg = opts.args
-   if arg:sub(1, 1) == "+" or arg:sub(1, 1) == "-" then
-      vim.cmd("tabmove " .. arg)
+   if input:sub(1, 1) == "+" or input:sub(1, 1) == "-" then
+      vim.cmd("tabmove " .. input)
    else
-      local target = tonumber(arg)
+      local target = tonumber(input)
       if target < 1 or target > vim.fn.tabpagenr("$") then
-         print("Tabm: " .. arg .. " out of range")
+         print(input .. " out of range")
          return
       end
       -- :tabmove N means "after the tab currently at position N", so moving right
@@ -103,4 +106,4 @@ vim.api.nvim_create_user_command("Tabm", function(opts)
          vim.cmd("tabmove " .. (target - 1))
       end
    end
-end, { nargs = 1 })
+end)

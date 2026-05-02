@@ -25,8 +25,16 @@ vim.opt.colorcolumn = "100"
 vim.g.mapleader = ","
 vim.g.maplocalleader = " "
 
+vim.api.nvim_create_autocmd("TextYankPost", {
+   callback = function(_) vim.highlight.on_yank() end,
+   group = vim.api.nvim_create_augroup("highlight_on_yank", {}),
+})
+
 vim.opt.updatetime = 100
 
 vim.opt.spelllang = "en_us"
 
+vim.opt.exrc = true
+
 vim.g["conjure#filetypes"] = { "clojure", "racket" }
+vim.g.sexp_filetypes = 'clojure,racket'
