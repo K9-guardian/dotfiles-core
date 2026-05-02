@@ -4,6 +4,8 @@
 # Source global definitions
 [ -f /etc/bashrc ] && . /etc/bashrc
 
+[ -d "$HOME/.bashrc.d/" ] && . "$HOME/.bashrc.d/preinit.bash"
+
 # Prompt {{{
 if tput colors &>/dev/null && [ "$(tput colors)" -ge 8 ]; then
   LITTLE_MAN='$(if [ $? = 0 ]; then echo "\[\e[32m\]\\o/\[\e[0m\]"; else echo "\[\e[31m\]/o\\\[\e[0m\]"; fi)'
@@ -35,7 +37,6 @@ shopt -s globstar
 # Set up completion/keybinds for applications
 command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
 command -v atuin >/dev/null 2>&1 && eval "$(atuin init bash --disable-up-arrow)"
-[ -f $HOME/.bash-preexec.sh ] && . "$HOME/.bash-preexec.sh"
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init --cmd cd bash)"
 # }}}
 
@@ -66,3 +67,7 @@ command -v kitty >/dev/null 2>&1 && alias icat='kitten icat --align left'
 alias ..='cd ..'
 alias gr='cd "$(git rev-parse --show-toplevel)"'
 # }}}
+
+[ -d "$HOME/.bashrc.d/" ] && . "$HOME/.bashrc.d/postinit.bash"
+
+[ -f $HOME/.bash-preexec.sh ] && . "$HOME/.bash-preexec.sh"

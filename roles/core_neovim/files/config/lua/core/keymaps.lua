@@ -1,11 +1,28 @@
 vim.keymap.set("c", "<C-a>", "<Home>")
 
-vim.keymap.set("n", "<Leader>w", "<Cmd>write<CR>", { silent = false })
+vim.keymap.set("n", "<Leader>w", "<Cmd>write<CR>")
 
-vim.keymap.set("n", "<Leader>h", "<Cmd>helpclose<CR>", { silent = false })
+vim.keymap.set("n", "<Leader>h", "<Cmd>helpclose<CR>")
 
-vim.keymap.set("n", "<Leader>co", "<Cmd>copen<CR>", { silent = false })
-vim.keymap.set("n", "<Leader>cc", "<Cmd>cclose<CR>", { silent = false })
+vim.keymap.set('n', '<leader>e', function()
+   local view = vim.fn.winsaveview()
+   vim.cmd('keepjumps normal! gg=G')
+   vim.fn.winrestview(view)
+end, { silent = true })
+
+vim.keymap.set('n', '<leader>f', function()
+   if vim.bo.formatprg == '' then
+      return
+   end
+   local view = vim.fn.winsaveview()
+   vim.cmd('keepjumps normal! gggqG')
+   vim.fn.winrestview(view)
+end, { silent = true })
+
+vim.keymap.set("n", "<C-^>", "<C-w>g<tab>", { silent = true })
+
+vim.keymap.set("n", "<Leader>co", "<Cmd>copen<CR>")
+vim.keymap.set("n", "<Leader>cc", "<Cmd>cclose<CR>")
 
 vim.keymap.set("v", "<Enter>", "<Plug>(EasyAlign)")
 vim.keymap.set("n", "ga", "<Plug>(EasyAlign)")

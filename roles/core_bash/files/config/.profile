@@ -1,6 +1,8 @@
 # .profile
 # vim:foldmethod=marker ft=sh
 
+[ -d "$HOME/.profile.d/" ] && . "$HOME/.profile.d/preinit.sh"
+
 # Defaults {{{
 export BROWSER=firefox
 export EDITOR=nvim
@@ -33,5 +35,7 @@ path_prepend "$HOME/.scripts"
 
 unset -f path_prepend
 #}}}
+
+[ -d "$HOME/.profile.d/" ] && . "$HOME/.profile.d/postinit.sh"
 
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
