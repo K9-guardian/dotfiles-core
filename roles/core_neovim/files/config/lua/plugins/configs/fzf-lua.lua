@@ -15,7 +15,6 @@ vim.keymap.set("n", "<C-S-p>", require("fzf-lua").git_files)
 vim.api.nvim_create_user_command('Rg', function(opts)
    require('fzf-lua').grep({
       search  = opts.args,
-      -- Add "--follow" to grep symlinks
       rg_opts = "--column --line-number --no-heading --color=always --smart-case --follow --max-columns=4096 -e",
    })
 end, {
@@ -27,7 +26,6 @@ end, {
 vim.api.nvim_create_user_command('History', function(opts)
    require('fzf-lua').oldfiles({
       search  = opts.args,
-      -- Add "--follow" to grep symlinks
       rg_opts = "--column --line-number --no-heading --color=always --smart-case --follow --max-columns=4096 -e",
    })
 end, {
