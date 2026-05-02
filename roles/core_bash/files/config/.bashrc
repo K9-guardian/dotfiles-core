@@ -4,7 +4,7 @@
 # Source global definitions
 [ -f /etc/bashrc ] && . /etc/bashrc
 
-[ -d "$HOME/.bashrc.d/" ] && . "$HOME/.bashrc.d/preinit.bash"
+[ -f "$HOME/.bashrc.d/preinit.bash" ] && . "$HOME/.bashrc.d/preinit.bash"
 
 # Prompt {{{
 if tput colors &>/dev/null && [ "$(tput colors)" -ge 8 ]; then
@@ -68,6 +68,6 @@ alias ..='cd ..'
 alias gr='cd "$(git rev-parse --show-toplevel)"'
 # }}}
 
-[ -d "$HOME/.bashrc.d/" ] && . "$HOME/.bashrc.d/postinit.bash"
+[ -f "$HOME/.bashrc.d/postinit.bash" ] && . "$HOME/.bashrc.d/postinit.bash"
 
 [ -f $HOME/.bash-preexec.sh ] && . "$HOME/.bash-preexec.sh"
