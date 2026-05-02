@@ -22,14 +22,6 @@ local function on_window_closed(event)
    window_snapshots[window_id] = nil
 end
 
-local function resurrect()
-   if #closed_stack == 0 then
-      vim.notify("Nothing to resurrect", vim.log.levels.INFO)
-      return
-   end
-   vim.cmd("tabnew " .. vim.fn.fnameescape(table.remove(closed_stack)))
-end
-
 local augroup = vim.api.nvim_create_augroup("resurrect", { clear = true })
 
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
@@ -42,7 +34,10 @@ vim.api.nvim_create_autocmd("WinClosed", {
    callback = on_window_closed,
 })
 
-vim.api.nvim_create_user_command(
-   "Resurrect",
-   resurrect, { desc = "Resurrect last closed window" }
-)
+vim.keymap.set("n", "<Leader>t", function()
+   if #closed_stack == 0 then
+      vim.notify("Nothing to resurrect", vim.log.levels.INFO)
+      return
+   end
+   vim.cmd("tabnew " .. vim.fn.fnameescape(table.remove(closed_stack)))
+end, { silent = false })
