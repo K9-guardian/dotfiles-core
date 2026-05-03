@@ -1,4 +1,6 @@
 #!/bin/sh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
 ANSIBLE_VENV="$HOME/.local/ansible-venv"
-python3 -m venv "$ANSIBLE_VENV"
-"$ANSIBLE_VENV/bin/pip" install ansible==13.6.0
+uv venv --python 3.14.4 "$ANSIBLE_VENV"
+uv pip install ansible==13.6.0 --python "$ANSIBLE_VENV/bin/python"
