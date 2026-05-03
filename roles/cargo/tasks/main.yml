@@ -1,5 +1,5 @@
 - name: Check if rustup is installed
-  command: "rustup --version"
+  command: "{{ cargo_install_dir }}/bin/rustup --version"
   register: rustup_check
   changed_when: false
   failed_when: false
@@ -10,7 +10,7 @@
   when: rustup_check.rc != 0
 
 - name: Update Rust toolchain
-  command: rustup update stable
+  command: "{{ cargo_install_dir }}/bin/rustup update stable"
   register: rustup_update
   changed_when: "'unchanged' not in rustup_update.stdout"
 
