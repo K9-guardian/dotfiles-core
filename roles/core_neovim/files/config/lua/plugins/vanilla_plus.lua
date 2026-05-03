@@ -3,15 +3,14 @@ return function(use)
 
    use "farmergreg/vim-lastplace"
    use { "haya14busa/vim-asterisk", config = function()
-      vim.keymap.set("n", "*", "<Plug>(asterisk-z*)")
-      vim.keymap.set("n", "#", "<Plug>(asterisk-z#)")
-      vim.keymap.set("n", "g*", "<Plug>(asterisk-gz*)")
-      vim.keymap.set("n", "g#", "<Plug>(asterisk-gz#)")
+      vim.keymap.set({ "n", "v" }, "*", "<Plug>(asterisk-z*)")
+      vim.keymap.set({ "n", "v" }, "#", "<Plug>(asterisk-z#)")
+      vim.keymap.set({ "n", "v" }, "g*", "<Plug>(asterisk-gz*)")
+      vim.keymap.set({ "n", "v" }, "g#", "<Plug>(asterisk-gz#)")
       vim.g["asterisk#keeppos"] = 1
    end }
    use "junegunn/vim-easy-align"
    use "michaeljsmith/vim-indent-object"
-   use { "nvim-mini/mini.ai", config = function() require("mini.ai").setup({}) end }
    use "tpope/vim-commentary"
    use "tpope/vim-fugitive"
    use "tpope/vim-repeat"
