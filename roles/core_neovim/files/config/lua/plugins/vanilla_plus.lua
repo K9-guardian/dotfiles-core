@@ -36,6 +36,21 @@ return function(use)
       config = function() require("plugins.configs.fzf-lua") end,
       requires = { "nvim-tree/nvim-web-devicons" },
    }
+   use { "stevearc/oil.nvim", config = function()
+      require("oil").setup {
+         view_options = {
+            show_hidden = true,
+         },
+         use_default_keymaps = false,
+         keymaps = {
+            ["<CR>"] = "actions.select",
+            ["-"] = { "actions.parent", mode = "n" },
+         },
+         skip_confirm_for_simple_edits = true,
+      }
+
+      vim.keymap.set("n", "<Leader>e", "<Cmd>Oil<CR>", {})
+   end }
 
    use {
       "nvim-treesitter/nvim-treesitter",

@@ -4,21 +4,14 @@ vim.keymap.set('i', '<C-c>', '<Esc>', { noremap = true})
 vim.api.nvim_create_user_command('W', 'write', { nargs = '*' })
 vim.api.nvim_create_user_command('Q', 'quitall', { nargs = '*' })
 
-vim.keymap.set('n', '<leader>r', 'cgn<C-r>0<Esc>')
+vim.keymap.set('n', '<Leader>r', 'cgn<C-r>0<Esc>')
+vim.keymap.set('n', '<Leader>R', 'cgN<C-r>0<Esc>')
 vim.keymap.set("n", "<Leader>h", "<Cmd>helpclose<CR>")
+vim.keymap.set("n", "<Leader>b", "<Cmd>bdelete<CR>")
 
-vim.keymap.set('n', '<leader>e', function()
+vim.keymap.set('n', '<Leader>=', function()
    local view = vim.fn.winsaveview()
    vim.cmd('keepjumps normal! gg=G')
-   vim.fn.winrestview(view)
-end, { silent = true })
-
-vim.keymap.set('n', '<leader>f', function()
-   if vim.bo.formatprg == '' then
-      return
-   end
-   local view = vim.fn.winsaveview()
-   vim.cmd('keepjumps normal! gggqG')
    vim.fn.winrestview(view)
 end, { silent = true })
 
