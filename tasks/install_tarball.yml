@@ -63,11 +63,15 @@
     when:
       - _download is succeeded
       - not ansible_check_mode
-    ansible.builtin.unarchive:
-      src: "/tmp/{{ _tarball_filename }}"
-      dest: "{{ tarball_install_dir }}"
-      remote_src: true
-      extra_opts: "{{ tarball_extra_opts | default([]) }}"
+    ansible.builtin.command:
+      cmd: >
+        tar xzf /tmp/{{ _tarball_filename }}
+        -C {{ tarball_install_dir }}
+        {{ tarball_extra_opts | default([]) | join(' ') }}
+      # src: "/tmp/{{ _tarball_filename }}"
+      # dest: "{{ tarball_install_dir }}"
+      # remote_src: true
+      # extra_opts: "{{ tarball_extra_opts | default([]) }}"
     become: true
 
   - name: "Remove temporary files for {{ tarball_app_name }}"
