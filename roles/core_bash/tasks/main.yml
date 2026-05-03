@@ -1,6 +1,18 @@
+- name: Setup bash on OSX
+  when: ansible_system == 'Darwin'
+  block:
+    - name: Install Homebrew
+      cmd: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      creates: "/opt/homebrew/bin/brew"
+
+    - name: Install bash
+      community.general.homebrew:
+        name: bash
+        state: present
+
 - name: Change login shell to /bin/bash
   ansible.builtin.command:
-    cmd: "chsh -s /bin/bash {{ ansible_facts.user_id }}"
+    cmd: "chsh -s {{ '/opt/homebrew/bin/bash' if ansible_system == 'Darwin' else '/bin/bash' }} {{ ansible_facts.user_id }}"
   become: true
   changed_when: false
 
