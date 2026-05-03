@@ -1,7 +1,10 @@
 require("tokyonight").setup {
    style = "night",
    transparent = true,
-   styles = { sidebars = "transparent" },
+   styles = {
+      sidebars = "transparent",
+      floats = "transparent",
+   },
    on_colors = function(colors)
       colors.fg_gutter = colors.purple
    end,
