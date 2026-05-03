@@ -2,13 +2,28 @@ return function(use)
    use { "folke/tokyonight.nvim", config = function() require("plugins.configs.tokyonight") end }
 
    use "farmergreg/vim-lastplace"
+   use { "haya14busa/vim-asterisk", config = function()
+      vim.keymap.set("n", "*", "<Plug>(asterisk-z*)")
+      vim.keymap.set("n", "#", "<Plug>(asterisk-z#)")
+      vim.keymap.set("n", "g*", "<Plug>(asterisk-gz*)")
+      vim.keymap.set("n", "g#", "<Plug>(asterisk-gz#)")
+      vim.g["asterisk#keeppos"] = 1
+   end }
    use "junegunn/vim-easy-align"
    use "michaeljsmith/vim-indent-object"
    use { "nvim-mini/mini.ai", config = function() require("mini.ai").setup({}) end }
    use "tpope/vim-commentary"
    use "tpope/vim-fugitive"
    use "tpope/vim-repeat"
-   use { "tpope/vim-surround", config = function() require("plugins.configs.surround") end }
+   use { "tpope/vim-surround", config = function()
+      vim.keymap.set("n", "s", "<Plug>Ysurround")
+      vim.keymap.set("n", "S", "<Plug>YSurround")
+      vim.keymap.set("n", "ss", "<Plug>Yssurround")
+      vim.keymap.set("n", "Ss", "<Plug>YSsurround")
+      vim.keymap.set("n", "SS", "<Plug>YSsurround")
+      vim.keymap.set("x", "s", "<Plug>VSurround")
+      vim.keymap.set("x", "gs", "<Plug>VgSurround")
+   end }
    use "tpope/vim-unimpaired"
 
    use { "hrsh7th/nvim-cmp", config = function() require("plugins.configs.nvim-cmp") end }
