@@ -56,8 +56,6 @@
     ansible.builtin.file:
       path: "{{ tarball_install_dir }}"
       state: directory
-      owner: root
-      group: root
       mode: '755'
     become: true
 
