@@ -25,6 +25,9 @@ return function(use)
    end }
    use "tpope/vim-unimpaired"
 
+   use "tpope/vim-dispatch"
+   use { "radenling/vim-dispatch-neovim", requires = { "tpope/vim-dispatch" } }
+
    use { "hrsh7th/nvim-cmp", config = function() require("plugins.configs.nvim-cmp") end }
    use { "hrsh7th/cmp-buffer", requires = { "hrsh7th/nvim-cmp" } }
    use { "hrsh7th/cmp-cmdline", requires = { "hrsh7th/nvim-cmp" } }
