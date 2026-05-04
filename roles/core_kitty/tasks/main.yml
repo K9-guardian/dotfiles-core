@@ -6,8 +6,8 @@
 - name: Check if kitty needs update
   include_tasks: "../../tasks/check_version.yml"
   vars:
-    check_binary_path: "{{ kitty_install_dir }}/bin/kitty"
-    check_version_cmd: "{{ kitty_install_dir }}/bin/kitty --version"
+    check_binary_path: "{{ kitty_binary }}"
+    check_version_cmd: "{{ kitty_binary }} --version"
     check_desired_version: "{{ _gh_desired_version }}"
     check_app_name: kitty
 
