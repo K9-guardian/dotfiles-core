@@ -22,5 +22,5 @@
   ansible.posix.synchronize:
     src: "config/"
     dest: "~"
-    times: true
+    times: false
     checksum: true

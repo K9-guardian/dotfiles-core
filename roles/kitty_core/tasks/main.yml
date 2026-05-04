@@ -54,5 +54,5 @@
   ansible.posix.synchronize:
     src: "config/"
     dest: "~/.config/kitty"
-    times: true
+    times: false
     checksum: true
