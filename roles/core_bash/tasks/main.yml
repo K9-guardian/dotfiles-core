@@ -2,8 +2,10 @@
   when: ansible_system == 'Darwin'
   block:
     - name: Install Homebrew
-      cmd: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      creates: "/opt/homebrew/bin/brew"
+      ansible.builtin.shell:
+        cmd: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      args:
+        creates: "/opt/homebrew/bin/brew"
 
     - name: Install bash
       community.general.homebrew:
