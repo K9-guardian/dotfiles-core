@@ -1,5 +1,5 @@
 - name: Setup bash on OSX
-  when: ansible_system == 'Darwin'
+  when: ansible_facts.system == 'Darwin'
   block:
     - name: Install Homebrew
       ansible.builtin.shell:
@@ -14,7 +14,7 @@
 
 - name: Change login shell to /bin/bash
   ansible.builtin.command:
-    cmd: "chsh -s {{ '/opt/homebrew/bin/bash' if ansible_system == 'Darwin' else '/bin/bash' }} {{ ansible_facts.user_id }}"
+    cmd: "chsh -s {{ '/opt/homebrew/bin/bash' if ansible_facts.system == 'Darwin' else '/bin/bash' }} {{ ansible_facts.user_id }}"
   become: true
   changed_when: false
 
