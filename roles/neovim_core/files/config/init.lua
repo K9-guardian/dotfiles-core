@@ -1,5 +1,6 @@
 pcall(require, "preinit")
 
+pcall(require, "osc52")
 require("core.settings")
 require("core.sessions")
 require("core.resurrect")
