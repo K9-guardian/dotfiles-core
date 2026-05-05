@@ -33,6 +33,6 @@ return require("packer").startup(function(use)
    end
 
    if packer_bootstrap then
-      require('packer').sync()
+      require("packer").sync()
    end
 end)

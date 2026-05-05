@@ -47,6 +47,7 @@ return function(use)
          keymaps = {
             ["<CR>"] = "actions.select",
             ["-"] = { "actions.parent", mode = "n" },
+            ["gq"] = { "actions.close", mode = "n" },
          },
          skip_confirm_for_simple_edits = true,
       }

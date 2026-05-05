@@ -1,10 +1,12 @@
 require("nvim-treesitter.configs").setup {
    ensure_installed = {
       "clojure",
+      "cpp",
       "go",
       "haskell",
       "java",
       "javascript",
+      "lua",
       "prolog",
       "python",
       "query",
@@ -60,7 +62,7 @@ require("nvim-treesitter.configs").setup {
          },
          include_surrounding_whitespace = function(opts)
             local q = opts.query_string
-            return (q:find('function') or q:find('class')) and q:find('outer') ~= nil
+            return (q:find("function") or q:find("class")) and q:find("outer") ~= nil
          end,
       },
 

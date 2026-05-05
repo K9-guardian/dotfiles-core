@@ -9,18 +9,19 @@ require("fzf-lua").setup {
 }
 
 vim.keymap.set("n", "<C-p>", "<Cmd>FzfLua combine pickers=buffers;files<CR>")
-vim.keymap.set('n', '<C-S-p>', function()
+vim.keymap.set("n", "<C-S-p>", function()
    FzfLua.combine({
       pickers = "buffers;git_files",
       cwd = FzfLua.path.git_root({}),
    })
 end)
 
-vim.api.nvim_create_user_command('Rg', function(opts)
+vim.api.nvim_create_user_command("Rg", function(opts)
    FzfLua.grep({ search  = opts.args })
-end, { nargs = '*' })
-vim.keymap.set("n", "<C-g>", "<Cmd>FzfLua combine pickers=grep_cword;grep_visual<CR>")
+end, { nargs = "*" })
+vim.keymap.set({ "n" }, "<C-g>", "<Cmd>FzfLua grep_cword<CR>")
+vim.keymap.set({ "v" }, "<C-g>", "<Cmd>FzfLua grep_visual<CR>")
 
-vim.api.nvim_create_user_command('History', function(opts)
+vim.api.nvim_create_user_command("History", function(opts)
    FzfLua.oldfiles({ search  = opts.args })
 end, {})
