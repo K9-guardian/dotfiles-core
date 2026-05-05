@@ -18,5 +18,6 @@
   ansible.posix.synchronize:
     src: "config/"
     dest: "~/.config/atuin"
+    group: false
     times: false
     checksum: true

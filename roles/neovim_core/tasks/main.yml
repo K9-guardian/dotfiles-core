@@ -19,5 +19,6 @@
   ansible.posix.synchronize:
     src: "config/"
     dest: "~/.config/nvim"
+    group: false
     times: false
     checksum: true
