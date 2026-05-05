@@ -28,7 +28,6 @@ path_prepend () {
 [ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
-path_prepend "$XDG_DATA_HOME/scryer-prolog/target/release"
 path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/.bin"
 path_prepend "$HOME/.scripts"
