@@ -25,7 +25,6 @@ path_prepend () {
   esac
 }
 
-[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
 path_prepend "$HOME/.local/bin"

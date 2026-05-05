@@ -36,7 +36,6 @@ shopt -s globstar
 
 # Set up completion/keybinds for applications
 command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
-command -v atuin >/dev/null 2>&1 && eval "$(atuin init bash --disable-up-arrow)"
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init --cmd cd bash)"
 # }}}
 
@@ -69,5 +68,3 @@ alias gr='cd "$(git rev-parse --show-toplevel)"'
 # }}}
 
 [ -f "$HOME/.bashrc.d/postinit.bash" ] && . "$HOME/.bashrc.d/postinit.bash"
-
-[ -f $HOME/.bash-preexec.sh ] && . "$HOME/.bash-preexec.sh"
