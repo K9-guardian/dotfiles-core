@@ -1,0 +1,9 @@
+#command
+/ forw-search ^W
+? back-search ^W
+
+#line-edit
+^W word-backspace
+
+#env
+LESS+=-i
