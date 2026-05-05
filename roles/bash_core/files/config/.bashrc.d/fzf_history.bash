@@ -33,7 +33,7 @@ PROMPT_COMMAND="_fzf_hist_append${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
 
 _fzf_hist_search() {
   local selected
-  selected=$(awk '!seen[$0]++' "$FZF_GLOBAL_HISTFILE" | fzf --tac --scheme=history --query "$READLINE_LINE")
+  selected=$(awk '!seen[$0]++' "$FZF_GLOBAL_HISTFILE" | fzf --tac --height 40% --min-height 20+ --scheme=history --query "$READLINE_LINE")
   READLINE_LINE="$selected"
   READLINE_POINT=${#READLINE_LINE}
 }
