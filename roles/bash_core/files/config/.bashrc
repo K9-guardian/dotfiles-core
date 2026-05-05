@@ -35,7 +35,9 @@ shopt -s checkwinsize
 shopt -s globstar
 
 # Set up completion/keybinds for applications
-command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
+command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)" \
+  && [ -f "$HOME/.bashrc.d/fzf_history.bash" ] \
+  && . "$HOME/.bashrc.d/fzf_history.bash"
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init --cmd cd bash)"
 # }}}
 
