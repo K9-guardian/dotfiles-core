@@ -2,9 +2,6 @@ FZF_GLOBAL_HISTFILE="${FZF_GLOBAL_HISTFILE:-$HOME/.bash_global_history}"
 FZF_GLOBAL_HISTSIZE="${FZF_GLOBAL_HISTSIZE:-50000}"
 touch "${FZF_GLOBAL_HISTFILE}"
 
-HISTFILE=""
-HISTCONTROL=ignoreboth
-
 # Truncate global history file if it exceeds FZF_GLOBAL_HISTSIZE
 if [[ -f "$FZF_GLOBAL_HISTFILE" ]]; then
   _fzf_hist_lines=$(wc -l < "$FZF_GLOBAL_HISTFILE")
