@@ -16,15 +16,19 @@ PS1="($LITTLE_MAN):\w $ "
 # }}}
 
 # Defaults {{{
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
+# History control:
+#   See bash(1) for more options
+HISTSIZE=50000 # In memory history size per terminal
+HISTFILESIZE=50000 # Global history file size
+HISTCONTROL=ignoreboth # don't put duplicate lines or lines starting with space in the history.
+HISTIGNORE="ls*:ll*:tree*:cd*:..*" # ignore common commands
+
+shopt -s histappend # append to the history file, don't overwrite it
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }history -a" # append to history file after every command
 
 # Disable screen reader support (needed for poppler)
 export NO_AT_BRIDGE=1
 
-# append to the history file, don't overwrite it
-shopt -s histappend
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -34,10 +38,15 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 shopt -s globstar
 
+_fzf_hist_search() {
+  local selected
+  selected=$(tac "$HISTFILE" | awk '!seen[$0]++' | fzf --height 40% --min-height 20+ --reverse --scheme=history --query "$READLINE_LINE")
+  READLINE_LINE="$selected"
+  READLINE_POINT=${#READLINE_LINE}
+}
+
 # Set up completion/keybinds for applications
-command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)" \
-  && [ -f "$HOME/.bashrc.d/fzf_history.bash" ] \
-  && . "$HOME/.bashrc.d/fzf_history.bash"
+command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)" && [[ $- == *i* ]] && bind -x '"\C-r": _fzf_hist_search'
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init --cmd cd bash)"
 # }}}
 
