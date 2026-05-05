@@ -1,6 +1,7 @@
 - name: Change login shell to /bin/bash
+  when: ansible_facts.system == 'Darwin'
   ansible.builtin.command:
-    cmd: "chsh -s {{ '/opt/homebrew/bin/bash' if ansible_facts.system == 'Darwin' else '/bin/bash' }} {{ ansible_facts.user_id }}"
+    cmd: "chsh -s /opt/homebrew/bin/bash {{ ansible_facts.user_id }}"
   become: true
   changed_when: false
 
