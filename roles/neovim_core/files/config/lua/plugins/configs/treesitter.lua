@@ -77,6 +77,7 @@ require("nvim-treesitter.configs").setup {
    },
 }
 
+vim.keymap.set("n", "c1iv", "1]vciv", { remap = true })
 vim.keymap.set("n", "c2iv", "2]vciv", { remap = true })
 vim.keymap.set("n", "c3iv", "3]vciv", { remap = true })
 vim.keymap.set("n", "c4iv", "4]vciv", { remap = true })
@@ -86,6 +87,7 @@ vim.keymap.set("n", "c7iv", "7]vciv", { remap = true })
 vim.keymap.set("n", "c8iv", "8]vciv", { remap = true })
 vim.keymap.set("n", "c9iv", "9]vciv", { remap = true })
 
+vim.keymap.set("n", "c1av", "1]vcav", { remap = true })
 vim.keymap.set("n", "c2av", "2]vcav", { remap = true })
 vim.keymap.set("n", "c3av", "3]vcav", { remap = true })
 vim.keymap.set("n", "c4av", "4]vcav", { remap = true })
@@ -95,6 +97,7 @@ vim.keymap.set("n", "c7av", "7]vcav", { remap = true })
 vim.keymap.set("n", "c8av", "8]vcav", { remap = true })
 vim.keymap.set("n", "c9av", "9]vcav", { remap = true })
 
+vim.keymap.set("n", "d1iv", "1]vdiv", { remap = true })
 vim.keymap.set("n", "d2iv", "2]vdiv", { remap = true })
 vim.keymap.set("n", "d3iv", "3]vdiv", { remap = true })
 vim.keymap.set("n", "d4iv", "4]vdiv", { remap = true })
@@ -104,6 +107,7 @@ vim.keymap.set("n", "d7iv", "7]vdiv", { remap = true })
 vim.keymap.set("n", "d8iv", "8]vdiv", { remap = true })
 vim.keymap.set("n", "d9iv", "9]vdiv", { remap = true })
 
+vim.keymap.set("n", "d1av", "1]vdav", { remap = true })
 vim.keymap.set("n", "d2av", "2]vdav", { remap = true })
 vim.keymap.set("n", "d3av", "3]vdav", { remap = true })
 vim.keymap.set("n", "d4av", "4]vdav", { remap = true })
@@ -113,6 +117,7 @@ vim.keymap.set("n", "d7av", "7]vdav", { remap = true })
 vim.keymap.set("n", "d8av", "8]vdav", { remap = true })
 vim.keymap.set("n", "d9av", "9]vdav", { remap = true })
 
+vim.keymap.set("n", "v1iv", "1]vviv", { remap = true })
 vim.keymap.set("n", "v2iv", "2]vviv", { remap = true })
 vim.keymap.set("n", "v3iv", "3]vviv", { remap = true })
 vim.keymap.set("n", "v4iv", "4]vviv", { remap = true })
@@ -122,6 +127,7 @@ vim.keymap.set("n", "v7iv", "7]vviv", { remap = true })
 vim.keymap.set("n", "v8iv", "8]vviv", { remap = true })
 vim.keymap.set("n", "v9iv", "9]vviv", { remap = true })
 
+vim.keymap.set("n", "v1av", "1]vvav", { remap = true })
 vim.keymap.set("n", "v2av", "2]vvav", { remap = true })
 vim.keymap.set("n", "v3av", "3]vvav", { remap = true })
 vim.keymap.set("n", "v4av", "4]vvav", { remap = true })
