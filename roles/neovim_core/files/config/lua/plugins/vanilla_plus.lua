@@ -7,7 +7,6 @@ return function(use)
       vim.keymap.set({ "n", "v" }, "#", "<Plug>(asterisk-z#)")
       vim.keymap.set({ "n", "v" }, "g*", "<Plug>(asterisk-gz*)")
       vim.keymap.set({ "n", "v" }, "g#", "<Plug>(asterisk-gz#)")
-      vim.g["asterisk#keeppos"] = 1
    end }
    use "junegunn/vim-easy-align"
    use "michaeljsmith/vim-indent-object"
@@ -47,7 +46,7 @@ return function(use)
          keymaps = {
             ["<CR>"] = "actions.select",
             ["-"] = { "actions.parent", mode = "n" },
-            ["gq"] = { "actions.close", mode = "n" },
+            ["<C-c>"] = { "actions.close", mode = "n" },
          },
          skip_confirm_for_simple_edits = true,
       }
