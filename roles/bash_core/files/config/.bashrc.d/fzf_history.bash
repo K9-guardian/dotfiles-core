@@ -29,7 +29,7 @@ _fzf_hist_append() {
   echo "$cmd" >> "$FZF_GLOBAL_HISTFILE"
 }
 
-PROMPT_COMMAND="_fzf_hist_append;${PROMPT_COMMAND}"
+PROMPT_COMMAND="_fzf_hist_append${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
 
 _fzf_hist_search() {
   local selected
