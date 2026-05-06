@@ -22,3 +22,21 @@
     group: false
     times: false
     checksum: true
+
+- name: Copy neovim osc52 configuration
+  ansible.posix.synchronize:
+    src: "osc52/"
+    dest: "~/.config/nvim"
+    group: false
+    times: false
+    checksum: true
+  when: neovim_osc52_enabled
+
+- name: Copy extra neovim configuration
+  ansible.posix.synchronize:
+    src: "{{ neovim_extra_config }}"
+    dest: "~/.config/nvim"
+    group: false
+    times: false
+    checksum: true
+  when: neovim_extra_config | length > 0

@@ -57,3 +57,12 @@
     group: false
     times: false
     checksum: true
+
+- name: Copy extra kitty configuration
+  ansible.posix.synchronize:
+    src: "{{ kitty_extra_config }}"
+    dest: "~/.config/kitty"
+    group: false
+    times: false
+    checksum: true
+  when: kitty_extra_config | length > 0

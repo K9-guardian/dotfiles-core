@@ -5,3 +5,12 @@
     group: false
     times: false
     checksum: true
+
+- name: Copy tmux configuration
+  ansible.posix.synchronize:
+    src: "{{ tmux_extra_config }}"
+    dest: "~"
+    group: false
+    times: false
+    checksum: true
+  when: tmux_extra_config | length > 0
