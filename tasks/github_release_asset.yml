@@ -10,6 +10,7 @@
 #   github_release_tag        - "latest" (default) or a specific tag
 #   os_tokens                 - override list of OS keywords (rarely needed)
 #   arch_tokens               - override list of architecture keywords
+#   ext_tokens                - override list of file extensions (default: ['tar.gz', 'tgz'])
 
 - name: Build GitHub API URL
   ansible.builtin.set_fact:
@@ -19,7 +20,7 @@
 - name: Fetch release metadata
   ansible.builtin.uri:
     url: "{{ _gh_api_url }}"
-    return_content: true
+    return_content: yes
     headers:
       Accept: "application/vnd.github+json"
     status_code: 200
@@ -44,11 +45,14 @@
            {'x86_64': ['amd64', 'x86_64', 'x64'],
             'i386': ['386', 'i386', 'x86'],
             'aarch64': ['arm64', 'aarch64'],
-            'arm64': ['arm64', 'aarch64'],
             'armv7l': ['armv7', 'armhf', 'arm'],
             'armv6l': ['armv6', 'arm']
            }[ansible_facts.architecture]
          ) }}
+
+- name: Set extension tokens
+  ansible.builtin.set_fact:
+    _ext_tokens: "{{ ext_tokens | default(['tar.gz', 'tgz']) }}"
 
 - name: Select best matching asset
   ansible.builtin.set_fact:
@@ -56,6 +60,7 @@
       {{ _gh_release.json.assets
          | selectattr('name', 'search', '(?i)(' ~ _os_tokens | join('|') ~ ')')
          | selectattr('name', 'search', '(?i)(' ~ _arch_tokens | join('|') ~ ')')
+         | selectattr('name', 'search', '(?i)(' ~ _ext_tokens | join('|') ~ ')$')
          | first | default('') }}
 
 - name: Fail if no suitable asset found
@@ -64,6 +69,7 @@
       No matching asset found for {{ ansible_facts.system }}/{{ ansible_facts.architecture }}.
       Tried OS tokens: {{ _os_tokens }}
       Tried arch tokens: {{ _arch_tokens }}
+      Tried ext tokens: {{ _ext_tokens }}
       Available assets: {{ _gh_release.json.assets | map(attribute='name') | list }}
   when: _best_asset == ''
 
