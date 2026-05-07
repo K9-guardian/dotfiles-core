@@ -39,8 +39,8 @@ command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init --cmd cd bash)"
 # populate ~/.bash_history which we can read from with CTRL+r.
 HISTSIZE=50000 # This variable only affects the in memory history, so we will keep using it.
 
-_HISTFILE="$HISTFILE"
 unset HISTFILE # remove default bash history mechanism
+_HISTFILE="$HOME/.bash_history"
 
 _HISTFILESIZE=50000
 _HISTIGNORE='^ls.*|^ll.*|^tree.*|^cd.*|^\.\.|^clear.*|^pwd.*|^vi.*|^fg.*|^ .*'
