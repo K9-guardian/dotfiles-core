@@ -57,11 +57,7 @@
 - name: Select best matching asset
   ansible.builtin.set_fact:
     _best_asset: >-
-      {{ _gh_release.json.assets
-         | selectattr('name', 'search', '(?i)(' ~ _os_tokens | join('|') ~ ')')
-         | selectattr('name', 'search', '(?i)(' ~ _arch_tokens | join('|') ~ ')')
-         | selectattr('name', 'search', '(?i)(' ~ _ext_tokens | join('|') ~ ')$')
-         | first | default('') }}
+      {{ _gh_release.json.assets | score_github_asset(_os_tokens, _arch_tokens, _ext_tokens) }}
 
 - name: Fail if no suitable asset found
   ansible.builtin.fail:
@@ -71,7 +67,7 @@
       Tried arch tokens: {{ _arch_tokens }}
       Tried ext tokens: {{ _ext_tokens }}
       Available assets: {{ _gh_release.json.assets | map(attribute='name') | list }}
-  when: _best_asset == ''
+  when: _best_asset is none
 
 - name: Set output facts
   ansible.builtin.set_fact:
