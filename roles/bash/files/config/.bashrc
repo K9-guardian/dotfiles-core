@@ -43,7 +43,7 @@ _HISTFILE="$HISTFILE"
 unset HISTFILE # remove default bash history mechanism
 
 _HISTFILESIZE=50000
-_HISTIGNORE='^ls.*|^ll.*|^tree.*|^cd.*|^\.\.|^clear.*|^pwd.*|^vi.*|^fg.*'
+_HISTIGNORE='^ls.*|^ll.*|^tree.*|^cd.*|^\.\.|^clear.*|^pwd.*|^vi.*|^fg.*|^ .*'
 
 _history_append() {
   local last_cmd
