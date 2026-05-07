@@ -18,15 +18,6 @@ PS1="($LITTLE_MAN):\w $ "
 # }}}
 
 # Defaults {{{
-# History control: See bash(1) for more options
-HISTSIZE=50000 # In memory history size per terminal
-HISTFILESIZE=50000 # Global history file size
-HISTCONTROL=ignoreboth # don't put duplicate lines or lines starting with space in the history.
-HISTIGNORE="ls*:ll*:tree*:cd*:..*" # ignore common commands
-
-shopt -s histappend # append to the history file, don't overwrite it
-PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }history -a" # append to history file after every command
-
 # Disable screen reader support (needed for poppler)
 export NO_AT_BRIDGE=1
 
@@ -38,22 +29,54 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 shopt -s globstar
 
-_fzf_hist_search() {
+# Set up completion/keybinds for applications
+command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init --cmd cd bash)"
+# }}}
+
+# {{{ History
+# This sets up history such that each new shell has it's own individual memory, but they all
+# populate ~/.bash_history which we can read from with CTRL+r.
+HISTSIZE=50000 # This variable only affects the in memory history, so we will keep using it.
+
+_HISTFILE="$HISTFILE"
+unset HISTFILE # remove default bash history mechanism
+
+_HISTFILESIZE=50000
+_HISTIGNORE='^ls.*|^ll.*|^tree.*|^cd.*|^\.\.|^clear.*|^pwd.*|^vi.*|^fg.*'
+
+_history_append() {
+  local last_cmd
+  last_cmd=$(fc -ln -1 | sed 's/^[[:space:]]*//') || return
+  [[ "$prev_cmd" == "$last_cmd" ]] && return
+  prev_cmd="$last_cmd"
+  [[ "$last_cmd" =~ $_HISTIGNORE ]] && return # unquoted so _HISTIGNORE is treated as regex
+  echo "$last_cmd" >> "$_HISTFILE"
+}
+
+_trim_history() {
+  tail -n "$_HISTFILESIZE" "$_HISTFILE" > "${_HISTFILE}.tmp" && mv "${_HISTFILE}.tmp" "$_HISTFILE"
+}
+trap _trim_history EXIT
+
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }_history_append"
+
+_fzf_history_search() {
+  # awk removes ALL dups, not just dedup
   local selected
-  selected=$(tac "$HISTFILE" | awk '!seen[$0]++' | fzf \
+  selected=$(tac "$_HISTFILE" | awk '!seen[$0]++' | fzf \
     --height 40% \
     --min-height 20+ \
     --reverse \
     --scheme=history \
     --query "$READLINE_LINE" \
     --bind 'esc:print-query+abort,ctrl-c:print-query+abort')
+
   READLINE_LINE="$selected"
   READLINE_POINT=${#READLINE_LINE}
 }
 
-# Set up completion/keybinds for applications
-command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)" && [[ $- == *i* ]] && bind -x '"\C-r": _fzf_hist_search'
-command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init --cmd cd bash)"
+command -v fzf >/dev/null 2>&1 && [[ $- == *i* ]] && bind -x '"\C-r": _fzf_history_search'
 # }}}
 
 # Aliases {{{
