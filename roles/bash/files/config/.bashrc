@@ -4,7 +4,9 @@
 # Source global definitions
 [ -f /etc/bashrc ] && . /etc/bashrc
 
-[ -f "$HOME/.bashrc.d/preinit.bash" ] && . "$HOME/.bashrc.d/preinit.bash"
+if [ -f "$HOME/.bashrc.d/preinit.bash" ]; then
+  . "$HOME/.bashrc.d/preinit.bash"
+fi
 
 # Prompt {{{
 if tput colors &>/dev/null && [ "$(tput colors)" -ge 8 ]; then
@@ -16,8 +18,7 @@ PS1="($LITTLE_MAN):\w $ "
 # }}}
 
 # Defaults {{{
-# History control:
-#   See bash(1) for more options
+# History control: See bash(1) for more options
 HISTSIZE=50000 # In memory history size per terminal
 HISTFILESIZE=50000 # Global history file size
 HISTCONTROL=ignoreboth # don't put duplicate lines or lines starting with space in the history.
@@ -29,7 +30,6 @@ PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }history -a" # append to hist
 # Disable screen reader support (needed for poppler)
 export NO_AT_BRIDGE=1
 
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -40,7 +40,13 @@ shopt -s globstar
 
 _fzf_hist_search() {
   local selected
-  selected=$(tac "$HISTFILE" | awk '!seen[$0]++' | fzf --height 40% --min-height 20+ --reverse --scheme=history --query "$READLINE_LINE")
+  selected=$(tac "$HISTFILE" | awk '!seen[$0]++' | fzf \
+    --height 40% \
+    --min-height 20+ \
+    --reverse \
+    --scheme=history \
+    --query "$READLINE_LINE" \
+    --bind 'esc:print-query+abort,ctrl-c:print-query+abort')
   READLINE_LINE="$selected"
   READLINE_POINT=${#READLINE_LINE}
 }
@@ -78,4 +84,6 @@ alias ..='cd ..'
 alias gr='cd "$(git rev-parse --show-toplevel)"'
 # }}}
 
-[ -f "$HOME/.bashrc.d/postinit.bash" ] && . "$HOME/.bashrc.d/postinit.bash"
+if [ -f "$HOME/.bashrc.d/postinit.bash" ]; then
+  . "$HOME/.bashrc.d/postinit.bash"
+fi
