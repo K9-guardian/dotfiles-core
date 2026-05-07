@@ -29,6 +29,18 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 shopt -s globstar
 
+# This reworks CTRL+x CTRL+e to populate history
+_edit_command() {
+  local tmpfile
+  tmpfile=$(mktemp)
+  echo "$READLINE_LINE" > "$tmpfile"
+  ${VISUAL:-${EDITOR:-vi}} "$tmpfile"
+  READLINE_LINE=$(cat "$tmpfile")
+  READLINE_POINT=${#READLINE_LINE}
+  rm -f "$tmpfile"
+}
+[[ $- == *i* ]] && bind -x '"\C-x\C-e": _edit_command'
+
 # Set up completion/keybinds for applications
 command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init --cmd cd bash)"
@@ -55,7 +67,8 @@ _history_append() {
 }
 
 _trim_history() {
-  tail -n "$_HISTFILESIZE" "$_HISTFILE" > "${_HISTFILE}.tmp" && mv "${_HISTFILE}.tmp" "$_HISTFILE"
+  tac "$_HISTFILE" | awk '!seen[$0]++' | tac | tail -n "$_HISTFILESIZE" > "${_HISTFILE}.tmp" \
+    && mv "${_HISTFILE}.tmp" "$_HISTFILE"
 }
 trap _trim_history EXIT
 
@@ -71,7 +84,6 @@ _fzf_history_search() {
     --scheme=history \
     --query "$READLINE_LINE" \
     --bind 'esc:print-query+abort,ctrl-c:print-query+abort')
-
   READLINE_LINE="$selected"
   READLINE_POINT=${#READLINE_LINE}
 }
