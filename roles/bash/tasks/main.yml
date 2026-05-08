@@ -16,7 +16,7 @@
 - name: Copy extra bash configuration
   ansible.posix.synchronize:
     src: "{{ bash_extra_config }}"
-    dest: "~/.config/nvim"
+    dest: "~"
     group: false
     times: false
     checksum: true
