@@ -44,6 +44,7 @@
       {{ arch_tokens | default(
            {'x86_64': ['amd64', 'x86_64', 'x64'],
             'i386': ['386', 'i386', 'x86'],
+            'arm64': ['arm64', 'aarch64'],
             'aarch64': ['arm64', 'aarch64'],
             'armv7l': ['armv7', 'armhf', 'arm'],
             'armv6l': ['armv6', 'arm']
