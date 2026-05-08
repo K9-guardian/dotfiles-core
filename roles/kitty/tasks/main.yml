@@ -50,19 +50,27 @@
         content: "kitty.desktop\n"
         mode: '644'
 
-- name: Copy kitty configuration
-  ansible.posix.synchronize:
-    src: "config/"
-    dest: "~/.config/kitty"
-    group: false
-    times: false
-    checksum: true
+- name: Ensure kitty config directory exists
+  ansible.builtin.file:
+    path: "~/.config/kitty"
+    state: directory
+    mode: '755'
 
-- name: Copy extra kitty configuration
-  ansible.posix.synchronize:
-    src: "{{ kitty_extra_config }}"
-    dest: "~/.config/kitty"
-    group: false
-    times: false
-    checksum: true
+- name: Stow kitty configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ role_path }}/files
+      --target={{ ansible_facts.user_dir }}/.config/kitty
+      config
+  changed_when: false
+
+- name: Stow extra kitty configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ kitty_extra_config }}
+      --target={{ ansible_facts.user_dir }}/.config/kitty
+      config
+  changed_when: false
   when: kitty_extra_config | length > 0
