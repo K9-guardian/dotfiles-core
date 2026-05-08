@@ -63,6 +63,7 @@ return function(use)
       "nvim-treesitter/nvim-treesitter-textobjects",
       branch = "master",
       requires = { "nvim-treesitter/nvim-treesitter" },
+      after = { "fzf-lua" },
       config = function() require("plugins.configs.treesitter") end,
    }
    use {

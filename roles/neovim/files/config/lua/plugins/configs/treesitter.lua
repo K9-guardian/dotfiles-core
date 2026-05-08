@@ -78,3 +78,11 @@ require("nvim-treesitter.configs").setup {
       },
    },
 }
+
+vim.keymap.set("n", "<C-S-o>", function()
+   require("fzf-lua").treesitter({
+      node_filter = function(_, kind)
+         return kind == "function" or kind == "type"
+      end,
+   })
+end)
