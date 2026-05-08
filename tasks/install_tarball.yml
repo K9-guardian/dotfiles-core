@@ -15,7 +15,10 @@
 #                             If empty/omitted, no checksum validation is performed.
 #   tarball_binary_subpath  - Relative path inside install dir to the main executable
 #                             (default: "bin/{{ tarball_app_name }}")
+#   tarball_create_symlink  - Boolean to create a symlink (defaults to true)
 #   tarball_symlink_name    - Name of the symlink in bin_dir (default: tarball_app_name)
+#   tarball_become          - Whether to use become for directory creation, extraction,
+#                             and cleanup (default: true)
 #   tarball_log_dir         - Name of the directory to store download logs for tarballs (default: ~/.tarballs)
 #   bin_dir                 - Directory for symlinks (default: ~/.bin)
 
@@ -83,6 +86,7 @@
       dest: "{{ bin_dir | default('~/.bin') }}/{{ tarball_symlink_name | default(tarball_app_name) }}"
       state: link
       force: true
+    when: tarball_create_symlink | default(true)
 
   - name: "Write {{ _tarball_filename }}  to {{ tarball_log_dir | default('~/.tarballs')}}/{{ tarball_app_name }}"
     ansible.builtin.copy:
