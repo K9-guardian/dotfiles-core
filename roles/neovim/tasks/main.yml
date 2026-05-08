@@ -15,28 +15,37 @@
     tarball_binary_subpath: "bin/nvim"
     tarball_symlink_name: "nvim"
 
-- name: Copy neovim configuration
-  ansible.posix.synchronize:
-    src: "config/"
-    dest: "~/.config/nvim"
-    group: false
-    times: false
-    checksum: true
+- name: Ensure neovim config directory exists
+  ansible.builtin.file:
+    path: "~/.config/nvim"
+    state: directory
+    mode: '755'
 
-- name: Copy neovim osc52 configuration
-  ansible.posix.synchronize:
-    src: "osc52/"
-    dest: "~/.config/nvim"
-    group: false
-    times: false
-    checksum: true
+- name: Stow neovim configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ role_path }}/files
+      --target={{ ansible_facts.user_dir }}/.config/nvim
+      config
+  changed_when: false
+
+- name: Stow osc52 neovim configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ role_path }}/files
+      --target={{ ansible_facts.user_dir }}/.config/nvim
+      osc52
+  changed_when: false
   when: neovim_osc52_enabled
 
-- name: Copy extra neovim configuration
-  ansible.posix.synchronize:
-    src: "{{ neovim_extra_config }}"
-    dest: "~/.config/nvim"
-    group: false
-    times: false
-    checksum: true
+- name: Stow extra neovim configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ neovim_extra_config }}
+      --target={{ ansible_facts.user_dir }}/.config/nvim
+      config
+  changed_when: false
   when: neovim_extra_config | length > 0
