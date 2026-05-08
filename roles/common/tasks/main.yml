@@ -6,5 +6,30 @@
   loop:
     - "~/.tarballs"
     - "~/.bin"
-    - "~/.scripts"
     - "~/.passfiles"
+
+- name: Download stow from tarball
+  include_tasks: "../../tasks/install_tarball.yml"
+  vars:
+    tarball_app_name: stow
+    tarball_url: "{{ stow_release_url }}"
+    tarball_install_dir: "{{ stow_source_dir }}"
+    tarball_extra_opts:
+      - "--strip-components=1"
+    tarball_binary_subpath: "stow"
+    tarball_create_symlink: false
+    tarball_become: false
+
+- name: Configure stow
+  ansible.builtin.command:
+    cmd: "./configure --prefix={{ ansible_facts.user_dir }}/.local"
+    chdir: "{{ stow_source_dir }}"
+  args:
+    creates: "{{ stow_source_dir }}/Makefile"
+
+- name: Build stow
+  ansible.builtin.command:
+    cmd: "make install"
+    chdir: "{{ stow_source_dir }}"
+  args:
+    creates: "{{ ansible_facts.user_dir }}/.local/bin/stow"

@@ -1,2 +1,5 @@
 ansible_python_interpreter: "{{ ansible_playbook_python }}"
 bin_dir: "~/.bin"
+
+stow_release_url: "https://gnu.mirror.constant.com/stow/stow-2.4.1.tar.gz"
+stow_source_dir: "~/.cache/stow"
