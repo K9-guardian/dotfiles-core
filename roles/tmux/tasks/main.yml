@@ -1,16 +1,18 @@
-- name: Copy tmux configuration
-  ansible.posix.synchronize:
-    src: "config/"
-    dest: "~"
-    group: false
-    times: false
-    checksum: true
+- name: Stow tmux configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ role_path }}/files
+      --target={{ ansible_facts.user_dir }}
+      config
+  changed_when: false
 
-- name: Copy tmux configuration
-  ansible.posix.synchronize:
-    src: "{{ tmux_extra_config }}"
-    dest: "~"
-    group: false
-    times: false
-    checksum: true
+- name: Stow extra tmux configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ tmux_extra_config }}
+      --target={{ ansible_facts.user_dir }}
+      config
+  changed_when: false
   when: tmux_extra_config | length > 0
