@@ -5,19 +5,21 @@
   become: true
   changed_when: false
 
-- name: Copy bash configuration
-  ansible.posix.synchronize:
-    src: "config/"
-    dest: "~"
-    group: false
-    times: false
-    checksum: true
+- name: Stow bash configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ role_path }}/files
+      --target={{ ansible_facts.user_dir }}
+      config
+  changed_when: false
 
-- name: Copy extra bash configuration
-  ansible.posix.synchronize:
-    src: "{{ bash_extra_config }}"
-    dest: "~"
-    group: false
-    times: false
-    checksum: true
+- name: Stow extra bash configuration
+  ansible.builtin.command:
+    cmd: >
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      --dir={{ bash_extra_config }}
+      --target={{ ansible_facts.user_dir }}
+      config
+  changed_when: false
   when: bash_extra_config | length > 0
