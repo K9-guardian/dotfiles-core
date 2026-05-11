@@ -24,7 +24,7 @@
 - name: Stow neovim configuration
   ansible.builtin.command:
     cmd: >
-      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_args }}
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_extra_args }}
       --dir={{ role_path }}/files
       --target={{ ansible_facts.user_dir }}/.config/nvim
       config
@@ -33,7 +33,7 @@
 - name: Stow osc52 neovim configuration
   ansible.builtin.command:
     cmd: >
-      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_args }}
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_extra_args }}
       --dir={{ role_path }}/files
       --target={{ ansible_facts.user_dir }}/.config/nvim
       osc52
@@ -43,7 +43,7 @@
 - name: Stow extra neovim configuration
   ansible.builtin.command:
     cmd: >
-      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_args }}
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_extra_args }}
       --dir={{ neovim_extra_config }}
       --target={{ ansible_facts.user_dir }}/.config/nvim
       config
