@@ -1,7 +1,7 @@
 - name: Stow tmux configuration
   ansible.builtin.command:
     cmd: >
-      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_args }}
       --dir={{ role_path }}/files
       --target={{ ansible_facts.user_dir }}
       config
@@ -10,7 +10,7 @@
 - name: Stow extra tmux configuration
   ansible.builtin.command:
     cmd: >
-      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding --restow
+      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_args }}
       --dir={{ tmux_extra_config }}
       --target={{ ansible_facts.user_dir }}
       config
