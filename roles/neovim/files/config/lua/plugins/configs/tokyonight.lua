@@ -24,6 +24,9 @@ require("tokyonight").setup {
       highlights.StatusLine.bg = "NONE"
       highlights.StatusLineNC.fg = colors.fg_gutter
       highlights.StatusLineNC.bg = "NONE"
+
+      highlights.TreesitterContext = { fg = '#56b6c2', bg = 'NONE' }
+      highlights.TreesitterContextBottom = { bg = 'NONE', underline = true, sp = '#56b6c2' }
    end,
 }
 
