@@ -42,12 +42,6 @@ vim.keymap.set("n", "<C-w>f", "<Cmd>vertical wincmd f<CR>")
 vim.keymap.set("v", "<C-w><C-F>", "<Cmd>vertical wincmd f<CR>")
 vim.keymap.set("v", "<C-w>f", "<Cmd>vertical wincmd f<CR>")
 
--- Add jumps for paging
-vim.keymap.set("n", "<C-d>", "m'<C-d>")
-vim.keymap.set("n", "<C-u>", "m'<C-u>")
-vim.keymap.set("n", "<C-f>", "m'<C-f>")
-vim.keymap.set("n", "<C-b>", "m'<C-b>")
-
 -- Returns a function that checks if motion was used with a count.
 -- If so, add position to the jumplist. Useful for big relative jumps like "20j".
 local function count_motion_with_jump(motion)
