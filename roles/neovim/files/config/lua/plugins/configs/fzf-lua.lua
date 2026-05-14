@@ -8,12 +8,16 @@ require("fzf-lua").setup {
    },
 }
 
-vim.keymap.set("n", "<C-p>", "<Cmd>FzfLua combine pickers=buffers;files<CR>")
-vim.keymap.set("n", "<C-S-p>", function()
-   FzfLua.combine({
-      pickers = "buffers;git_files",
-      cwd = FzfLua.path.git_root({}),
-   })
+vim.keymap.set("n", "<C-p>", "<Cmd>FzfLua files<CR>")
+vim.keymap.set("n", "<C-S-p>", "<Cmd>FzfLua git_files<CR>")
+vim.keymap.set("n", "<Leader>b", function()
+   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name ~= "" and vim.bo[buf].buflisted and vim.fn.filereadable(name) == 0 then
+         vim.api.nvim_buf_delete(buf, {})
+      end
+   end
+   FzfLua.buffers()
 end)
 
 vim.api.nvim_create_user_command("Rg", function(opts)

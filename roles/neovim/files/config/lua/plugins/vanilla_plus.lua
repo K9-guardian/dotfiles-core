@@ -47,11 +47,12 @@ return function(use)
             ["<CR>"] = "actions.select",
             ["-"] = { "actions.parent", mode = "n" },
             ["<C-c>"] = { "actions.close", mode = "n" },
+            ["gy"] = { "actions.yank_entry", mode = "n" },
          },
          skip_confirm_for_simple_edits = true,
       }
 
-      vim.keymap.set("n", "<Leader>e", "<Cmd>Oil<CR>", {})
+      vim.keymap.set("n", "-", "<Cmd>Oil<CR>")
    end }
 
    use {

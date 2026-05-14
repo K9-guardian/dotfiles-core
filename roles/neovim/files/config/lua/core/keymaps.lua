@@ -4,16 +4,30 @@ vim.keymap.set("i", "<C-c>", "<Esc>", { noremap = true})
 vim.api.nvim_create_user_command("W", "write", { nargs = "*" })
 vim.api.nvim_create_user_command("Q", "quitall", { nargs = "*" })
 
-vim.keymap.set("n", "<Leader>r", "cgn<C-r>0<Esc>")
-vim.keymap.set("n", "<Leader>R", "cgN<C-r>0<Esc>")
-vim.keymap.set("n", "<Leader>h", "<Cmd>helpclose<CR>")
-vim.keymap.set("n", "<Leader>b", "<Cmd>bdelete<CR>")
+vim.api.nvim_create_user_command("F", function()
+   local view = vim.fn.winsaveview()
+   vim.cmd("keepjumps normal! gggqG")
+   vim.fn.winrestview(view)
+end, {})
 
 vim.keymap.set("n", "<Leader>=", function()
    local view = vim.fn.winsaveview()
    vim.cmd("keepjumps normal! gg=G")
    vim.fn.winrestview(view)
-end, { silent = true })
+end, {})
+
+vim.api.nvim_create_user_command("M", function(opts)
+   vim.cmd((opts.bang and "Make! " or "Make ") .. opts.args)
+end, { nargs = "*", bang = true })
+
+vim.api.nvim_create_user_command("SudoWrite", function()
+   vim.cmd("write !sudo tee % > /dev/null")
+   vim.cmd.edit { bang = true }
+end, {})
+
+vim.keymap.set("n", "<Leader>r", "cgn<C-r>0<Esc>")
+vim.keymap.set("n", "<Leader>R", "cgN<C-r>0<Esc>")
+vim.keymap.set("n", "<Leader>h", "<Cmd>helpclose<CR>")
 
 vim.keymap.set("n", "<C-&>", "<C-w>g<tab>", { silent = true })
 
