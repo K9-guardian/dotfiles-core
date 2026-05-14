@@ -24,7 +24,7 @@ return function(use)
    end }
    use "tpope/vim-unimpaired"
 
-   use "tpope/vim-dispatch"
+   use { "tpope/vim-dispatch", config = function() vim.g.dispatch_no_maps = 1 end }
    use { "radenling/vim-dispatch-neovim", requires = { "tpope/vim-dispatch" } }
 
    use { "hrsh7th/nvim-cmp", config = function() require("plugins.configs.nvim-cmp") end }
