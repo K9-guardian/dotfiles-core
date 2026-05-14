@@ -4,7 +4,7 @@ require("fzf-lua").setup {
       fullscreen = true,
       preview = {
          border = "none",
-      }
+      },
    },
 }
 
