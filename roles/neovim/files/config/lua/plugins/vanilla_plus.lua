@@ -24,7 +24,15 @@ return function(use)
    end }
    use "tpope/vim-unimpaired"
 
-   use { "tpope/vim-dispatch", config = function() vim.g.dispatch_no_maps = 1 end }
+   use {
+      "tpope/vim-dispatch",
+      config = function()
+         vim.g.dispatch_no_maps = 1
+         vim.api.nvim_create_user_command("M", function(opts)
+            vim.cmd((opts.bang and "Make! " or "Make ") .. opts.args)
+         end, { nargs = "*", bang = true })
+      end,
+   }
    use { "radenling/vim-dispatch-neovim", requires = { "tpope/vim-dispatch" } }
 
    use { "hrsh7th/nvim-cmp", config = function() require("plugins.configs.nvim-cmp") end }
@@ -47,7 +55,20 @@ return function(use)
             ["<CR>"] = "actions.select",
             ["-"] = { "actions.parent", mode = "n" },
             ["<C-c>"] = { "actions.close", mode = "n" },
-            ["gy"] = { "actions.yank_entry", mode = "n" },
+            ["gy"] = {
+               function()
+                  require("oil.actions").yank_entry.callback({ modify = ":t" })
+                  require("oil.actions").close.callback()
+               end,
+               mode = "n",
+            },
+            ["gY"] = {
+               function()
+                  require("oil.actions").yank_entry.callback({ modify = ":p" })
+                  require("oil.actions").close.callback()
+               end,
+               mode = "n",
+            },
          },
          skip_confirm_for_simple_edits = true,
       }
