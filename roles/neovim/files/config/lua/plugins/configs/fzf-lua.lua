@@ -34,3 +34,22 @@ end)
 vim.api.nvim_create_user_command("History", function(opts)
    FzfLua.oldfiles({ search  = opts.args })
 end, {})
+
+vim.keymap.set('n', 'g<C-y>', function()
+   if vim.fn.expand('%:p') == '' then
+      vim.notify("No file in current buffer", vim.log.levels.WARN)
+      return
+   end
+
+   require("fzf-lua").files({
+      actions = {
+         ["default"] = function(selected, opts)
+            local target = vim.fn.resolve(require("fzf-lua.path").entry_to_file(selected[1], opts).path)
+            local current_dir = vim.fn.resolve(vim.fn.expand('%:p:h'))
+            local relpath = require("core.paths").relpath(target, current_dir)
+            vim.fn.setreg('+', relpath)
+            vim.defer_fn(function() vim.notify(relpath, vim.log.levels.INFO) end, 100)
+         end,
+      },
+   })
+end, {})
