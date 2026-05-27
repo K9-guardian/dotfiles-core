@@ -6,7 +6,6 @@
   loop:
     - "~/.tarballs"
     - "~/.bin"
-    - "~/.passfiles"
 
 - name: Download stow from tarball
   include_tasks: "../../tasks/install_tarball.yml"
