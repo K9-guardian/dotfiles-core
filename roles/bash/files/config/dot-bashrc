@@ -83,7 +83,7 @@ _fzf_history_search() {
     --reverse \
     --scheme=history \
     --query "$READLINE_LINE" \
-    --bind 'esc:print-query+abort,ctrl-c:print-query+abort')
+    --bind 'enter:accept-non-empty+print-query+abort,esc:print-query+abort,ctrl-c:print-query+abort')
   READLINE_LINE="$selected"
   READLINE_POINT=${#READLINE_LINE}
 }
