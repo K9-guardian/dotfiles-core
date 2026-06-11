@@ -5,6 +5,20 @@
   become: true
   changed_when: false
 
+- name: Find existing .bash_profile and .bashrc files
+  ansible.builtin.find:
+    paths: "{{ ansible_facts.user_dir }}"
+    patterns: "^\\.bash_profile$|^\\.bashrc$"
+    file_type: file
+    use_regex: true
+  register: bash_files
+
+- name: Remove conflicting bash dotfiles
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ bash_files.files }}"
+
 - name: Stow bash configuration
   ansible.builtin.command:
     cmd: >
