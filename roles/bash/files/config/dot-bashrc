@@ -55,7 +55,7 @@ unset HISTFILE # remove default bash history mechanism
 _HISTFILE="$HOME/.bash_history"
 
 _HISTFILESIZE=50000
-_HISTIGNORE='^ls.*|^ll.*|^tree.*|^cd.*|^\.\.|^clear.*|^pwd.*|^vi.*|^fg.*|^ .*'
+_HISTIGNORE='^(ls|ll|tree|cd|\.\.|clear|pwd|vi|fg| )'
 
 _history_append() {
   local last_cmd
@@ -67,7 +67,8 @@ _history_append() {
 }
 
 _trim_history() {
-  tac "$_HISTFILE" | awk '!seen[$0]++' | tac | tail -n "$_HISTFILESIZE" > "${_HISTFILE}.tmp" \
+  local tmpfile="$_HISTFILE.tmp.$$"
+  tac "$_HISTFILE" | awk '!seen[$0]++' | tac | tail -n "$_HISTFILESIZE" > "$tmpfile" \
     && mv "${_HISTFILE}.tmp" "$_HISTFILE"
 }
 trap _trim_history EXIT
