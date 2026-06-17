@@ -20,7 +20,7 @@
 - name: Fetch release metadata
   ansible.builtin.uri:
     url: "{{ _gh_api_url }}"
-    return_content: yes
+    return_content: true
     headers:
       Accept: "application/vnd.github+json"
     status_code: 200
