@@ -49,3 +49,10 @@
       config
   changed_when: false
   when: neovim_extra_config | length > 0
+
+- name: Install dependencies for treesitter
+  ansible.builtin.dnf:
+    name: gcc
+    state: latest
+  become: true
+  when: ansible_facts.os_family == 'RedHat'
