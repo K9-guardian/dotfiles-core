@@ -69,7 +69,7 @@ _history_append() {
 _trim_history() {
   local tmpfile="$_HISTFILE.tmp.$$"
   tac "$_HISTFILE" | awk '!seen[$0]++' | tac | tail -n "$_HISTFILESIZE" > "$tmpfile" \
-    && mv "${_HISTFILE}.tmp" "$_HISTFILE"
+    && mv "$tmpfile" "$_HISTFILE"
 }
 trap _trim_history EXIT
 
