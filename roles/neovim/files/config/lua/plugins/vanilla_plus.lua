@@ -1,67 +1,29 @@
-return function(use)
-   use { "folke/tokyonight.nvim", config = function() require("plugins.configs.tokyonight") end }
+vim.pack.add({
+   'https://github.com/folke/tokyonight.nvim',
+   'https://github.com/farmergreg/vim-lastplace',
+   'https://github.com/haya14busa/vim-asterisk',
+   'https://github.com/junegunn/vim-easy-align',
+   'https://github.com/michaeljsmith/vim-indent-object',
+   'https://github.com/tpope/vim-commentary',
+   'https://github.com/tpope/vim-fugitive',
+   'https://github.com/tpope/vim-repeat',
+   'https://github.com/tpope/vim-surround',
+   'https://github.com/tpope/vim-unimpaired',
+   'https://github.com/tpope/vim-dispatch',
+   'https://github.com/radenling/vim-dispatch-neovim',
+   'https://github.com/hrsh7th/nvim-cmp',
+   'https://github.com/hrsh7th/cmp-buffer',
+   'https://github.com/hrsh7th/cmp-cmdline',
+   'https://github.com/hrsh7th/cmp-path',
+   'https://github.com/ibhagwan/fzf-lua',
+   'https://github.com/nvim-tree/nvim-web-devicons',
+   'https://github.com/stevearc/oil.nvim',
+})
 
-   use "farmergreg/vim-lastplace"
-   use { "haya14busa/vim-asterisk", config = function()
-      vim.keymap.set({ "n", "v" }, "*", "<Plug>(asterisk-z*)")
-      vim.keymap.set({ "n", "v" }, "#", "<Plug>(asterisk-z#)")
-      vim.keymap.set({ "n", "v" }, "g*", "<Plug>(asterisk-gz*)")
-      vim.keymap.set({ "n", "v" }, "g#", "<Plug>(asterisk-gz#)")
-   end }
-   use "junegunn/vim-easy-align"
-   use "michaeljsmith/vim-indent-object"
-   use "tpope/vim-commentary"
-   use "tpope/vim-fugitive"
-   use "tpope/vim-repeat"
-   use { "tpope/vim-surround", config = function()
-      vim.keymap.set("n", "s", "<Plug>Ysurround")
-      vim.keymap.set("n", "S", "<Plug>YSurround")
-      vim.keymap.set("n", "ss", "<Plug>Yssurround")
-      vim.keymap.set("n", "Ss", "<Plug>YSsurround")
-      vim.keymap.set("n", "SS", "<Plug>YSsurround")
-      vim.keymap.set("x", "s", "<Plug>VSurround")
-      vim.keymap.set("x", "gs", "<Plug>VgSurround")
-   end }
-   use "tpope/vim-unimpaired"
-
-   use {
-      "tpope/vim-dispatch",
-      config = function()
-         vim.g.dispatch_no_maps = 1
-         vim.api.nvim_create_user_command("M", function(opts)
-            vim.cmd((opts.bang and "Make! " or "Make ") .. opts.args)
-         end, { nargs = "*", bang = true })
-      end,
-   }
-   use { "radenling/vim-dispatch-neovim", requires = { "tpope/vim-dispatch" } }
-
-   use { "hrsh7th/nvim-cmp", config = function() require("plugins.configs.nvim-cmp") end }
-   use { "hrsh7th/cmp-buffer", requires = { "hrsh7th/nvim-cmp" } }
-   use { "hrsh7th/cmp-cmdline", requires = { "hrsh7th/nvim-cmp" } }
-   use { "hrsh7th/cmp-path", requires = { "hrsh7th/nvim-cmp" } }
-
-   use {
-      "ibhagwan/fzf-lua",
-      config = function() require("plugins.configs.fzf-lua") end,
-      requires = { "nvim-tree/nvim-web-devicons" },
-   }
-   use { "stevearc/oil.nvim", config = function() require("plugins.configs.oil") end }
-
-   -- use {
-   --    "nvim-treesitter/nvim-treesitter",
-   --    branch = "master",
-   --    run = ":TSUpdate",
-   -- }
-   -- use {
-   --    "nvim-treesitter/nvim-treesitter-textobjects",
-   --    branch = "master",
-   --    requires = { "nvim-treesitter/nvim-treesitter" },
-   --    after = { "fzf-lua" },
-   --    config = function() require("plugins.configs.treesitter") end,
-   -- }
-   -- use {
-   --    "HiPhish/rainbow-delimiters.nvim",
-   --    commit = "3277ad5f96eb03c9d618c88e24f683e4364e578c",
-   --    requires = { "nvim-treesitter/nvim-treesitter" }
-   -- }
-end
+require("plugins.configs.tokyonight")
+require("plugins.configs.asterisk")
+require("plugins.configs.surround")
+require("plugins.configs.dispatch")
+require("plugins.configs.nvim-cmp")
+require("plugins.configs.fzf-lua")
+require("plugins.configs.oil")

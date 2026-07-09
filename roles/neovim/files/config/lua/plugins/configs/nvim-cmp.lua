@@ -1,9 +1,14 @@
 local cmp = require("cmp")
+local has_luasnip, luasnip = pcall(require, "luasnip")
 
 cmp.setup({
    snippet = {
       expand = function(args)
-         require("luasnip").lsp_expand(args.body)
+         if has_luasnip then
+            luasnip.lsp_expand(args.body)
+         else
+            vim.snippet.expand(args.body)
+         end
       end,
    },
    mapping = cmp.mapping.preset.insert({
@@ -13,10 +18,10 @@ cmp.setup({
       ["<C-e>"] = cmp.mapping.abort(),
       ["<CR>"] = cmp.mapping.confirm({ select = true }),
    }),
-   sources = cmp.config.sources({
-      { name = "nvim_lsp" },
-      { name = "luasnip" },
-   }, {
-      { name = "buffer" },
-   }),
+   sources = cmp.config.sources(
+      has_luasnip
+         and { { name = "nvim_lsp" }, { name = "luasnip" } }
+         or  { { name = "nvim_lsp" } },
+      { { name = "buffer" } }
+   ),
 })
