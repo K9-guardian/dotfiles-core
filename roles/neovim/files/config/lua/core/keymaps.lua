@@ -4,6 +4,13 @@ vim.keymap.set("i", "<C-c>", "<Esc>", { noremap = true})
 vim.api.nvim_create_user_command("W", "write", { nargs = "*" })
 vim.api.nvim_create_user_command("Q", "quitall", { nargs = "*" })
 
+vim.keymap.set("n", "ZR", function()
+   local f = '/tmp/nvim-restart-' .. vim.fn.getpid() .. '.vim'
+   vim.cmd('mksession! ' .. f)
+   vim.fn.writefile({'call delete(' .. vim.fn.string(f) .. ')'}, f, 'a')
+   vim.cmd('restart source ' .. f)
+end)
+
 vim.api.nvim_create_user_command("F", function()
    local view = vim.fn.winsaveview()
    vim.cmd("normal! gggqG")
