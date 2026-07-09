@@ -20,12 +20,6 @@ vim.pack.add({
    'https://github.com/stevearc/oil.nvim',
 })
 
--- vim.pack.add({
---    'https://github.com/nvim-treesitter/nvim-treesitter',
---    'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
---    'https://github.com/HiPhish/rainbow-delimiters.nvim',
--- })
-
 require("plugins.configs.tokyonight")
 require("plugins.configs.asterisk")
 require("plugins.configs.surround")
