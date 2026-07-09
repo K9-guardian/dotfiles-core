@@ -3,5 +3,5 @@ neovim_release_tag_name: "v0.12.4"
 
 neovim_install_dir: "/opt/nvim"
 neovim_osc52_enabled: false
-neovim_treesitter_enabled: false
+treesitter_install_method: "package"
 neovim_extra_config: ""

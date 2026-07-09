@@ -30,15 +30,31 @@
       config
   changed_when: false
 
-- name: Stow treesitter neovim configuration
-  ansible.builtin.command:
-    cmd: >
-      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_extra_args }}
-      --dir={{ role_path }}/files
-      --target={{ ansible_facts.user_dir }}/.config/nvim
-      treesitter
-  changed_when: false
-  when: neovim_treesitter_enabled
+- name: Install tree-sitter CLI via dnf
+  ansible.builtin.dnf:
+    name:
+      - gcc
+      - tree-sitter-cli
+    state: latest
+  become: true
+  when:
+    - treesitter_install_method == "package"
+    - ansible_facts.os_family == 'RedHat'
+
+- name: Install tree-sitter CLI via brew
+  community.general.homebrew:
+    name: tree-sitter
+    state: latest
+  when:
+    - treesitter_install_method == "package"
+    - ansible_facts.os_family == 'Darwin'
+
+- name: Install tree-sitter CLI via cargo
+  community.general.cargo:
+    name: tree-sitter-cli
+    state: latest
+  when:
+    - treesitter_install_method == "cargo"
 
 - name: Stow osc52 neovim configuration
   ansible.builtin.command:

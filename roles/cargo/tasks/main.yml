@@ -25,6 +25,5 @@
     - sd
     - tealdeer
     - tokei
-    - tree-sitter-cli
     - zoxide
     state: latest
