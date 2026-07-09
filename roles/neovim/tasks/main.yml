@@ -33,7 +33,6 @@
 - name: Install tree-sitter CLI via dnf
   ansible.builtin.dnf:
     name:
-      - gcc
       - tree-sitter-cli
     state: latest
   become: true
@@ -43,7 +42,7 @@
 
 - name: Install tree-sitter CLI via brew
   community.general.homebrew:
-    name: tree-sitter
+    name: tree-sitter-cli
     state: latest
   when:
     - treesitter_install_method == "package"
