@@ -11,10 +11,7 @@ vim.pack.add({
    'https://github.com/tpope/vim-unimpaired',
    'https://github.com/tpope/vim-dispatch',
    'https://github.com/radenling/vim-dispatch-neovim',
-   'https://github.com/hrsh7th/nvim-cmp',
-   'https://github.com/hrsh7th/cmp-buffer',
-   'https://github.com/hrsh7th/cmp-cmdline',
-   'https://github.com/hrsh7th/cmp-path',
+   { src = 'https://github.com/Saghen/blink.cmp', version = 'v1' },
    'https://github.com/ibhagwan/fzf-lua',
    'https://github.com/nvim-tree/nvim-web-devicons',
    'https://github.com/stevearc/oil.nvim',
@@ -24,6 +21,6 @@ require("plugins.configs.tokyonight")
 require("plugins.configs.asterisk")
 require("plugins.configs.surround")
 require("plugins.configs.dispatch")
-require("plugins.configs.nvim-cmp")
+require("plugins.configs.blink")
 require("plugins.configs.fzf-lua")
 require("plugins.configs.oil")
