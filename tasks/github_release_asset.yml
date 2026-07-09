@@ -7,7 +7,7 @@
 #
 # Input variables (all optional except github_repo):
 #   github_repo               - "owner/repo" (required)
-#   github_release_tag        - "latest" (default) or a specific tag
+#   github_release_id         - "latest" (default) or a specific tag
 #   os_tokens                 - override list of OS keywords (rarely needed)
 #   arch_tokens               - override list of architecture keywords
 #   ext_tokens                - override list of file extensions (default: ['tar.gz', 'tgz'])
@@ -15,7 +15,7 @@
 - name: Build GitHub API URL
   ansible.builtin.set_fact:
     _gh_api_url: >-
-      https://api.github.com/repos/{{ github_repo }}/releases/{{ github_release_tag | default('latest') }}
+      https://api.github.com/repos/{{ github_repo }}/releases/{{ github_release_id | default('latest') }}
 
 - name: Fetch release metadata
   ansible.builtin.uri:

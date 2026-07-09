@@ -1,10 +1,10 @@
-- name: Get neovim v0.10.4 information
+- name: Get neovim {{ neovim_release_tag_name }} information
   include_tasks: "../../tasks/github_release_asset.yml"
   vars:
     github_repo: "neovim/neovim"
-    github_release_tag: "{{ neovim_release_tag }}"
+    github_release_id: "{{ neovim_release_id }}"
 
-- name: Install neovim v0.10.4 from tarball
+- name: Install neovim {{ neovim_release_tag_name }} from tarball
   include_tasks: "../../tasks/install_tarball.yml"
   vars:
     tarball_app_name: neovim

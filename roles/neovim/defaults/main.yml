@@ -1,4 +1,5 @@
-neovim_release_tag: "197326483" # v0.10.4
+neovim_release_id: "349171501"
+neovim_release_tag_name: "v0.12.4"
 
 neovim_install_dir: "/opt/nvim"
 neovim_osc52_enabled: false

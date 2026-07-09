@@ -47,21 +47,21 @@ return function(use)
    }
    use { "stevearc/oil.nvim", config = function() require("plugins.configs.oil") end }
 
-   use {
-      "nvim-treesitter/nvim-treesitter",
-      branch = "master",
-      run = ":TSUpdate",
-   }
-   use {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-      branch = "master",
-      requires = { "nvim-treesitter/nvim-treesitter" },
-      after = { "fzf-lua" },
-      config = function() require("plugins.configs.treesitter") end,
-   }
-   use {
-      "HiPhish/rainbow-delimiters.nvim",
-      commit = "3277ad5f96eb03c9d618c88e24f683e4364e578c",
-      requires = { "nvim-treesitter/nvim-treesitter" }
-   }
+   -- use {
+   --    "nvim-treesitter/nvim-treesitter",
+   --    branch = "master",
+   --    run = ":TSUpdate",
+   -- }
+   -- use {
+   --    "nvim-treesitter/nvim-treesitter-textobjects",
+   --    branch = "master",
+   --    requires = { "nvim-treesitter/nvim-treesitter" },
+   --    after = { "fzf-lua" },
+   --    config = function() require("plugins.configs.treesitter") end,
+   -- }
+   -- use {
+   --    "HiPhish/rainbow-delimiters.nvim",
+   --    commit = "3277ad5f96eb03c9d618c88e24f683e4364e578c",
+   --    requires = { "nvim-treesitter/nvim-treesitter" }
+   -- }
 end
