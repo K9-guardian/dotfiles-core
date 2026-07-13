@@ -1,5 +1,5 @@
 - name: Check if rustup is installed
-  command: "rustup --version"
+  command: "{{ ansible_facts.user_dir }}/.cargo/bin/rustup --version"
   register: rustup_check
   changed_when: false
   failed_when: false
@@ -10,13 +10,25 @@
   when: rustup_check.rc != 0
 
 - name: Update Rust toolchain
-  command: "rustup update stable"
+  command: "{{ ansible_facts.user_dir }}/.cargo/bin/rustup update stable"
   register: rustup_update
   changed_when: "'unchanged' not in rustup_update.stdout"
 
-- name: Install or update cargo packages
-  community.general.cargo:
-    name:
+- name: Check if cargo-binstall is installed
+  command: "{{ ansible_facts.user_dir }}/.cargo/bin/cargo binstall -V"
+  register: binstall_check
+  changed_when: false
+  failed_when: false
+
+- name: Install cargo-binstall
+  ansible.builtin.shell:
+    cmd: "curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash"
+  when: binstall_check.rc != 0
+
+- name: Install cargo packages via binstall
+  ansible.builtin.command:
+    cmd: "{{ ansible_facts.user_dir }}/.cargo/bin/cargo binstall --no-confirm {{ item }}"
+  loop:
     - bat
     - du-dust
     - eza
@@ -26,4 +38,5 @@
     - tealdeer
     - tokei
     - zoxide
-    state: latest
+  register: binstall_result
+  changed_when: "'is already installed' not in binstall_result.stdout"

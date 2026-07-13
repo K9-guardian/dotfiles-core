@@ -30,30 +30,11 @@
       config
   changed_when: false
 
-- name: Install tree-sitter CLI via dnf
-  ansible.builtin.dnf:
-    name:
-      - tree-sitter-cli
-    state: latest
-  become: true
-  when:
-    - treesitter_install_method == "package"
-    - ansible_facts.os_family == 'RedHat'
-
-- name: Install tree-sitter CLI via brew
-  community.general.homebrew:
-    name: tree-sitter-cli
-    state: latest
-  when:
-    - treesitter_install_method == "package"
-    - ansible_facts.os_family == 'Darwin'
-
-- name: Install tree-sitter CLI via cargo
-  community.general.cargo:
-    name: tree-sitter-cli
-    state: latest
-  when:
-    - treesitter_install_method == "cargo"
+- name: Install tree-sitter CLI via cargo binstall
+  ansible.builtin.command:
+    cmd: "{{ ansible_facts.user_dir }}/.cargo/bin/cargo binstall --no-confirm tree-sitter-cli"
+  register: treesitter_binstall
+  changed_when: "'is already installed' not in treesitter_binstall.stdout"
 
 - name: Stow osc52 neovim configuration
   ansible.builtin.command:
