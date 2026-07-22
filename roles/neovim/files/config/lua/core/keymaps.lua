@@ -33,6 +33,17 @@ vim.keymap.set('n', 'gY', function()
    vim.notify(filename_full, vim.log.levels.INFO)
 end, {})
 
+vim.api.nvim_create_user_command("FileLink", function(opts)
+   local reference = vim.fn.expand("%:p") .. ":" .. opts.line1
+   if opts.line1 ~= opts.line2 then
+      reference = reference .. "-" .. opts.line2
+   end
+   vim.fn.setreg("+", reference)
+   vim.notify(reference, vim.log.levels.INFO)
+end, { range = true })
+
+vim.keymap.set({ "n", "v" }, "gl", ":FileLink<CR>", { silent = true })
+
 vim.api.nvim_create_user_command("SudoWrite", function()
    vim.cmd("write !sudo tee % > /dev/null")
    vim.cmd.edit { bang = true }
