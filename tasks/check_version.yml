@@ -29,7 +29,7 @@
 
 - name: "Extract installed version string"
   vars:
-    _version_pattern: '(\d+\.\d+\.\d+)' # Defining this AOT to avoid escaping hell
+    _version_pattern: '(\d+\.\d+\.\d+(?:\.\d+)?)' # Defining this AOT to avoid escaping hell
   when:
     - _check_stat.stat.exists
     - _check_installed is success
