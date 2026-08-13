@@ -3,6 +3,9 @@ require("fzf-lua").setup {
       border = "none",
       fullscreen = true,
       preview = {
+         builtin = {
+            treesitter = { enabled = false },
+         },
          border = "none",
       },
    },

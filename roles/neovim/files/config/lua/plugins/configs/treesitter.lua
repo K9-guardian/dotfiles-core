@@ -1,6 +1,6 @@
 require("nvim-treesitter").install {
-   "clojure", "cpp", "go", "haskell", "java", "javascript",
-   "lua", "prolog", "python", "query", "racket", "rust",
+   "clojure", "cpp", "go", "haskell", "java", "javascript", "lua", "python",
+   "query", "racket", "rust",
 }
 
 vim.api.nvim_create_autocmd("FileType", {
