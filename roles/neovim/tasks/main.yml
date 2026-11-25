@@ -36,6 +36,20 @@
   register: treesitter_binstall
   changed_when: "'is already installed' not in treesitter_binstall.stdout"
 
+- name: Install formatters
+  block:
+    - name: Install ruff
+      ansible.builtin.command:
+        cmd: "{{ ansible_facts.user_dir }}/.local/bin/uv tool install ruff"
+      register: ruff_uvtoolinstall
+      changed_when: "'is already installed' not in ruff_uvtoolinstall.stderr"
+
+    - name: Install StyLua
+      ansible.builtin.command:
+        cmd: "{{ ansible_facts.user_dir }}/.cargo/bin/cargo binstall --no-confirm stylua"
+      register: stylua_binstall
+      changed_when: "'is already installed' not in stylua_binstall.stdout"
+
 - name: Stow osc52 neovim configuration
   ansible.builtin.command:
     cmd: >
