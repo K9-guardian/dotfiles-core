@@ -11,7 +11,7 @@ vim.keymap.set("n", "ZR", function()
    vim.cmd('restart source ' .. f)
 end)
 
-vim.api.nvim_create_user_command("F", function()
+vim.keymap.set("n", "<Leader>f", function()
    local view = vim.fn.winsaveview()
    vim.cmd("normal! gggqG")
    vim.fn.winrestview(view)
