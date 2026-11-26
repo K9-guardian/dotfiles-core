@@ -27,8 +27,9 @@
   ansible.builtin.command:
     cmd: >
       {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_extra_args }}
-      --dir={{ extra_scripts }}
+      --dir={{ item }}
       --target={{ ansible_facts.user_dir }}/.scripts
       config
   changed_when: false
-  when: extra_scripts | length > 0
+  loop: "{{ [extra_scripts] if extra_scripts is string else extra_scripts }}"
+  when: item | length > 0
