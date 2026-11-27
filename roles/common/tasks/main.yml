@@ -4,7 +4,7 @@
     state: directory
     mode: '755'
   loop:
-    - "~/.tarballs"
+    - "~/.archives"
     - "~/.bin"
 
 - name: Download stow from archive
