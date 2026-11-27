@@ -7,17 +7,17 @@
     - "~/.tarballs"
     - "~/.bin"
 
-- name: Download stow from tarball
-  include_tasks: "../../tasks/install_tarball.yml"
+- name: Download stow from archive
+  include_tasks: "../../tasks/install_archive.yml"
   vars:
-    tarball_app_name: stow
-    tarball_url: "{{ stow_release_url }}"
-    tarball_install_dir: "{{ stow_source_dir }}"
-    tarball_extra_opts:
+    archive_app_name: stow
+    archive_url: "{{ stow_release_url }}"
+    archive_install_dir: "{{ stow_source_dir }}"
+    archive_extra_opts:
       - "--strip-components=1"
-    tarball_binary_subpath: "stow"
-    tarball_create_symlink: false
-    tarball_become: false
+    archive_binary_subpath: "stow"
+    archive_create_symlink: false
+    archive_become: false
 
 - name: Configure stow
   ansible.builtin.command:

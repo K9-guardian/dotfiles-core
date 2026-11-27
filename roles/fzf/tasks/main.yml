@@ -3,11 +3,11 @@
   vars:
     github_repo: "junegunn/fzf"
 
-- name: Install fzf from tarball
-  include_tasks: "../../tasks/install_tarball.yml"
+- name: Install fzf from archive
+  include_tasks: "../../tasks/install_archive.yml"
   vars:
-    tarball_app_name: fzf
-    tarball_url: "{{ _gh_download_url }}"
-    tarball_install_dir: "{{ fzf_install_dir }}"
-    tarball_binary_subpath: "fzf"
-    tarball_symlink_name: "fzf"
+    archive_app_name: fzf
+    archive_url: "{{ _gh_download_url }}"
+    archive_install_dir: "{{ fzf_install_dir }}"
+    archive_binary_subpath: "fzf"
+    archive_symlink_name: "fzf"

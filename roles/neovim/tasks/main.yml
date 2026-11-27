@@ -4,16 +4,16 @@
     github_repo: "neovim/neovim"
     github_release_id: "{{ neovim_release_id }}"
 
-- name: Install neovim {{ neovim_release_tag_name }} from tarball
-  include_tasks: "../../tasks/install_tarball.yml"
+- name: Install neovim {{ neovim_release_tag_name }} from archive
+  include_tasks: "../../tasks/install_archive.yml"
   vars:
-    tarball_app_name: neovim
-    tarball_url: "{{ _gh_download_url }}"
-    tarball_install_dir: "{{ neovim_install_dir }}"
-    tarball_extra_opts:
+    archive_app_name: neovim
+    archive_url: "{{ _gh_download_url }}"
+    archive_install_dir: "{{ neovim_install_dir }}"
+    archive_extra_opts:
       - "--strip-components=1"
-    tarball_binary_subpath: "bin/nvim"
-    tarball_symlink_name: "nvim"
+    archive_binary_subpath: "bin/nvim"
+    archive_symlink_name: "nvim"
 
 - name: Ensure neovim config directory exists
   ansible.builtin.file:
