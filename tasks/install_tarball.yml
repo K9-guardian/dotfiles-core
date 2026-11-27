@@ -22,65 +22,65 @@
 #   tarball_log_dir         - Name of the directory to store download logs for tarballs (default: ~/.tarballs)
 #   bin_dir                 - Directory for symlinks (default: ~/.bin)
 
-- name: "Store tarball filename for later tasks"
+- name: Store tarball filename for later tasks
   ansible.builtin.set_fact:
     _tarball_filename: "{{ tarball_url | basename }}"
 
-- name: "Check if {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }} exists"
+- name: Check if {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }} exists
   ansible.builtin.stat:
     path: "{{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
   register: _check_log_dir_file
 
-- name: "Read and decode {{ tarball_app_name }} filename from {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
+- name: Read and decode {{ tarball_app_name }} filename from {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}
   when: _check_log_dir_file.stat.exists
   block:
-  - name: "Read {{ tarball_app_name }} filename from {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
+  - name: Read {{ tarball_app_name }} filename from {{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}
     ansible.builtin.slurp:
       src: "{{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
     register: _previous_tarball_filename_encoded
 
-  - name: "Decode {{ tarball_app_name }} filename"
+  - name: Decode {{ tarball_app_name }} filename
     ansible.builtin.set_fact:
       _previous_tarball_filename: >-
         {{ (_previous_tarball_filename_encoded.content | b64decode | trim)
            if not _previous_tarball_filename_encoded.failed else '' }}
 
-- name: "Install {{ tarball_app_name }} tarball"
+- name: Install {{ tarball_app_name }} tarball
   when: _previous_tarball_filename is not defined or _previous_tarball_filename != _tarball_filename
   block:
-  - name: "Download {{ tarball_app_name }} tarball"
+  - name: Download {{ tarball_app_name }} tarball
     ansible.builtin.get_url:
       url: "{{ tarball_url }}"
       dest: "/tmp/{{ _tarball_filename }}"
       checksum: "{{ tarball_checksum | default(omit) }}"
     register: _download
 
-  - name: "Ensure install directory exists for {{ tarball_app_name }}"
+  - name: Ensure install directory exists for {{ tarball_app_name }}
     ansible.builtin.file:
       path: "{{ tarball_install_dir }}"
       state: directory
       mode: '755'
     become: "{{ tarball_become | default(true) }}"
 
-  - name: "Extract {{ tarball_app_name }} tarball"
+  - name: "Extract {{ tarball_app_name }} archive"
     when:
       - _download is succeeded
       - not ansible_check_mode
-    ansible.builtin.command:
-      cmd: >
-        tar xzf /tmp/{{ _tarball_filename }}
-        -C {{ tarball_install_dir }}
-        {{ tarball_extra_opts | default([]) | join(' ') }}
+    ansible.builtin.unarchive:
+      src: "/tmp/{{ _tarball_filename }}"
+      dest: "{{ tarball_install_dir }}"
+      remote_src: true
+      extra_opts: "{{ tarball_extra_opts | default([]) }}"
     become: "{{ tarball_become | default(true) }}"
 
-  - name: "Remove temporary files for {{ tarball_app_name }}"
+  - name: Remove temporary files for {{ tarball_app_name }}
     when: not ansible_check_mode
     ansible.builtin.file:
       path: "/tmp/{{ _tarball_filename }}"
       state: absent
     become: "{{ tarball_become | default(true) }}"
 
-  - name: "Symlink {{ tarball_app_name }} into {{ bin_dir | default('~/.bin') }}"
+  - name: Symlink {{ tarball_app_name }} into {{ bin_dir | default('~/.bin') }}
     ansible.builtin.file:
       src: "{{ tarball_install_dir }}/{{ tarball_binary_subpath | default('bin/' + tarball_app_name) }}"
       dest: "{{ bin_dir | default('~/.bin') }}/{{ tarball_symlink_name | default(tarball_app_name) }}"
@@ -88,7 +88,7 @@
       force: true
     when: tarball_create_symlink | default(true)
 
-  - name: "Write {{ _tarball_filename }}  to {{ tarball_log_dir | default('~/.tarballs')}}/{{ tarball_app_name }}"
+  - name: Write {{ _tarball_filename }}  to {{ tarball_log_dir | default('~/.tarballs')}}/{{ tarball_app_name }}
     ansible.builtin.copy:
       content: "{{ _tarball_filename }}"
       dest: "{{ tarball_log_dir | default('~/.tarballs') }}/{{ tarball_app_name }}"
