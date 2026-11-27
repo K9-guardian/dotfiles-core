@@ -13,16 +13,6 @@
       config
   changed_when: false
 
-- name: Stow shared scripts
-  ansible.builtin.command:
-    cmd: >
-      {{ ansible_facts.user_dir }}/.local/bin/stow --dotfiles --no-folding {{ stow_extra_args }}
-      --dir={{ shared_scripts }}
-      --target={{ ansible_facts.user_dir }}/.scripts
-      config
-  changed_when: false
-  when: shared_scripts | length > 0
-
 - name: Stow extra scripts
   ansible.builtin.command:
     cmd: >
