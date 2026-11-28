@@ -48,47 +48,47 @@
 - name: Install {{ archive_app_name }} archive
   when: _previous_archive_filename is not defined or _previous_archive_filename != _archive_filename
   block:
-  - name: Download {{ archive_app_name }} archive
-    ansible.builtin.get_url:
-      url: "{{ archive_url }}"
-      dest: "/tmp/{{ _archive_filename }}"
-      checksum: "{{ archive_checksum | default(omit) }}"
-    register: _download
+    - name: Download {{ archive_app_name }} archive
+      ansible.builtin.get_url:
+        url: "{{ archive_url }}"
+        dest: "/tmp/{{ _archive_filename }}"
+        checksum: "{{ archive_checksum | default(omit) }}"
+      register: _download
 
-  - name: Ensure install directory exists for {{ archive_app_name }}
-    ansible.builtin.file:
-      path: "{{ archive_install_dir }}"
-      state: directory
-      mode: '755'
-    become: "{{ archive_become | default(true) }}"
+    - name: Ensure install directory exists for {{ archive_app_name }}
+      ansible.builtin.file:
+        path: "{{ archive_install_dir }}"
+        state: directory
+        mode: '755'
+      become: "{{ archive_become | default(true) }}"
 
-  - name: "Extract {{ archive_app_name }} archive"
-    when:
-      - _download is succeeded
-      - not ansible_check_mode
-    ansible.builtin.unarchive:
-      src: "/tmp/{{ _archive_filename }}"
-      dest: "{{ archive_install_dir }}"
-      remote_src: true
-      extra_opts: "{{ archive_extra_opts | default([]) }}"
-    become: "{{ archive_become | default(true) }}"
+    - name: "Extract {{ archive_app_name }} archive"
+      when:
+        - _download is succeeded
+        - not ansible_check_mode
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ _archive_filename }}"
+        dest: "{{ archive_install_dir }}"
+        remote_src: true
+        extra_opts: "{{ archive_extra_opts | default([]) }}"
+      become: "{{ archive_become | default(true) }}"
 
-  - name: Remove temporary files for {{ archive_app_name }}
-    when: not ansible_check_mode
-    ansible.builtin.file:
-      path: "/tmp/{{ _archive_filename }}"
-      state: absent
-    become: "{{ archive_become | default(true) }}"
+    - name: Remove temporary files for {{ archive_app_name }}
+      when: not ansible_check_mode
+      ansible.builtin.file:
+        path: "/tmp/{{ _archive_filename }}"
+        state: absent
+      become: "{{ archive_become | default(true) }}"
 
-  - name: Symlink {{ archive_app_name }} into {{ bin_dir | default('~/.bin') }}
-    ansible.builtin.file:
-      src: "{{ archive_install_dir }}/{{ archive_binary_subpath | default('bin/' + archive_app_name) }}"
-      dest: "{{ bin_dir | default('~/.bin') }}/{{ archive_symlink_name | default(archive_app_name) }}"
-      state: link
-      force: true
-    when: archive_create_symlink | default(true)
+    - name: Symlink {{ archive_app_name }} into {{ bin_dir | default('~/.bin') }}
+      ansible.builtin.file:
+        src: "{{ archive_install_dir }}/{{ archive_binary_subpath | default('bin/' + archive_app_name) }}"
+        dest: "{{ bin_dir | default('~/.bin') }}/{{ archive_symlink_name | default(archive_app_name) }}"
+        state: link
+        force: true
+      when: archive_create_symlink | default(true)
 
-  - name: Write {{ _archive_filename }}  to {{ archive_log_dir | default('~/.archives')}}/{{ archive_app_name }}
-    ansible.builtin.copy:
-      content: "{{ _archive_filename }}"
-      dest: "{{ archive_log_dir | default('~/.archives') }}/{{ archive_app_name }}"
+    - name: Write {{ _archive_filename }}  to {{ archive_log_dir | default('~/.archives')}}/{{ archive_app_name }}
+      ansible.builtin.copy:
+        content: "{{ _archive_filename }}"
+        dest: "{{ archive_log_dir | default('~/.archives') }}/{{ archive_app_name }}"
